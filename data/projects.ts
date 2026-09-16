@@ -1,17 +1,17 @@
 /**
  * PROJETS PRODUITS
  * ----------------------------------------------------------------
- * Règle : ne rien inventer. Un champ inconnu reste `null` ou vide :
+ * Règle : ne rien inventer. Un champ inconnu reste `null` ou vide :
  * la section correspondante n'est alors pas affichée.
  *
- * status  : "Live" | "Demo" | "Prototype" | "In Development" | "Concept" | null
- * feature.state :
+ * status  : "Live" | "Demo" | "Prototype" | "In Development" | "Concept" | null
+ * feature.state :
  *   "working"     fonctionnel aujourd'hui
  *   "in-progress" en cours de développement
  *   "planned"     prévu
  *   "scope"       périmètre du produit, état non encore précisé
  *
- * Captures : déposer les fichiers dans /public/projects/<slug>/
+ * Captures : déposer les fichiers dans /public/projects/<slug>/
  * puis renseigner `src` (ex. "/projects/centrium/dashboard.png").
  */
 
@@ -72,7 +72,7 @@ export const projects: Project[] = [
     slug: "centrium",
     tagline: "La plateforme métier des ESN.",
     description:
-      "La plateforme métier des ESN et cabinets de conseil : bibliothèque de consultants, CV Optimizer assisté par IA, CRM commercial, matching consultants et appels d'offres, CRA et facturation. Hébergement européen.",
+      "La plateforme métier des ESN et cabinets de conseil : bibliothèque de consultants, CV Optimizer assisté par IA, CRM commercial, matching consultants et appels d'offres, CRA et facturation. Hébergement européen.",
     category: "SaaS / ERP",
     year: null,
     status: null,
@@ -110,7 +110,7 @@ export const projects: Project[] = [
     slug: "lumely",
     tagline: "Le parcours complet d'un photographe, du contrat à l'archivage.",
     description:
-      "SaaS destiné aux photographes. Lumely suit une séance de bout en bout : contrat, signature, acompte, shooting, galerie de sélection, paiement, livraison HD et archivage.",
+      "SaaS destiné aux photographes. Lumely suit une séance de bout en bout : contrat, signature, acompte, shooting, galerie de sélection, paiement, livraison HD et archivage.",
     category: "SaaS",
     year: null,
     status: null,
@@ -154,7 +154,7 @@ export const projects: Project[] = [
     slug: "aequitas",
     tagline: "Facturation électronique française.",
     description:
-      "Plateforme orientée facturation électronique, conçue pour le cadre administratif français : entreprises, documents, workflows et suivi de conformité.",
+      "Plateforme orientée facturation électronique, conçue pour le cadre administratif français : entreprises, documents, workflows et suivi de conformité.",
     category: "SaaS / Facturation",
     year: null,
     status: null,
@@ -177,7 +177,7 @@ export const projects: Project[] = [
     slug: "skillora",
     tagline: "Matching intelligent entre un CV et une offre.",
     description:
-      "Skillora compare un CV à une offre d'emploi : analyse du CV, scoring, matching et pistes d'optimisation.",
+      "Skillora compare un CV à une offre d'emploi : analyse du CV, scoring, matching et pistes d'optimisation.",
     category: "SaaS / Recrutement",
     year: null,
     status: null,
@@ -197,7 +197,7 @@ export const projects: Project[] = [
     slug: "studio-one",
     tagline: "Plateforme de création vidéo IA.",
     description:
-      "Plateforme de création vidéo assistée par IA. Outils et approches étudiés : Remotion pour la composition vidéo en code, Higgsfield pour la génération, ElevenLabs pour la voix.",
+      "Plateforme de création vidéo assistée par IA. Outils et approches étudiés : Remotion pour la composition vidéo en code, Higgsfield pour la génération, ElevenLabs pour la voix.",
     category: "Plateforme créative",
     year: null,
     status: null,
@@ -217,7 +217,7 @@ export const projects: Project[] = [
     slug: "tilawa",
     tagline: "Écouter, lire et comprendre le Coran.",
     description:
-      "Application autour du Coran : reconnaissance audio, transcription, traduction, en français, en arabe et en phonétique.",
+      "Application autour du Coran : reconnaissance audio, transcription, traduction, en français, en arabe et en phonétique.",
     category: "Application",
     year: null,
     status: null,
@@ -236,7 +236,7 @@ export const projects: Project[] = [
     slug: "odyssea",
     tagline: "Le voyage sur mesure, sans les semaines de préparation.",
     description:
-      "On indique où, quand et avec qui : Odyssea compose les vols, l'hébergement et chaque journée heure par heure, avec plusieurs escales possibles et des dates souples.",
+      "On indique où, quand et avec qui : Odyssea compose les vols, l'hébergement et chaque journée heure par heure, avec plusieurs escales possibles et des dates souples.",
     category: "Voyage",
     year: null,
     status: null,

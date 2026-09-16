@@ -4,9 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import dynamic from "next/dynamic";
 
 const CommandPalette = dynamic(() => import("./CommandPalette").then((m) => m.CommandPalette), { ssr: false });
-const Terminal = dynamic(() => import("./Terminal").then((m) => m.Terminal), { ssr: false });
 
-type Overlay = "palette" | "terminal" | null;
+type Overlay = "palette" | null;
 type Ctx = { open: (o: Exclude<Overlay, null>) => void; close: () => void; current: Overlay };
 
 const OverlayContext = createContext<Ctx | null>(null);
@@ -45,7 +44,6 @@ export function OverlayProvider({ children }: { children: React.ReactNode }) {
     <OverlayContext.Provider value={value}>
       {children}
       {loaded && <CommandPalette open={current === "palette"} />}
-      {loaded && <Terminal open={current === "terminal"} />}
     </OverlayContext.Provider>
   );
 }

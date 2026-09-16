@@ -1,49 +1,24 @@
 /**
  * HOME LAB
- * ----------------------------------------------------------------
- * Le diagramme est entièrement généré depuis ce fichier.
- * Rien n'est inventé : chaque valeur entre crochets est à remplacer.
- *
- * Positionnement : x et y en pourcentage de la zone du diagramme (0 à 100).
- * status : "online" | "offline" | "maintenance" | null
+ * Seules les informations réellement connues sont affichées.
+ * Les inventaires restent vides tant qu'ils ne sont pas renseignés :
+ * les blocs correspondants ne sont alors pas rendus (jamais de « à renseigner » public).
  */
-
-export type HomelabStatus = "online" | "offline" | "maintenance";
-
-export type HomelabNode = {
-  id: string;
-  label: string;
-  hostname: string;
-  role: string;
-  os: string;
-  ip: string;
-  network: string;
-  services: string[];
-  status: HomelabStatus | null;
-  x: number;
-  y: number;
-  kind: "edge" | "gateway" | "switch" | "host" | "service";
-};
-
-export type HomelabLink = { from: string; to: string; label?: string; network?: string };
+export type Tier = { id: string; label: string; detail: string };
 
 export const homelab = {
-  /** false tant que les vraies données ne sont pas saisies : affiche la mention "documentation en cours" */
-  documented: false,
-  networks: [{ id: "lan", name: "[NETWORK_NAME]", cidr: "[CIDR]", vlan: "[VLAN_ID]" }],
-  vlans: [] as { id: string; name: string }[],
-  machines: [] as { id: string; name: string; specs: string }[],
-  nodes: [
-    { id: "wan", label: "Accès internet", hostname: "[HOSTNAME]", role: "[ROLE]", os: "[OS]", ip: "[IP]", network: "WAN", services: [], status: null, x: 8, y: 50, kind: "edge" },
-    { id: "gateway", label: "Passerelle", hostname: "[HOSTNAME]", role: "[ROLE]", os: "[OS]", ip: "[IP]", network: "[NETWORK]", services: [], status: null, x: 30, y: 50, kind: "gateway" },
-    { id: "lan", label: "Réseau local", hostname: "[HOSTNAME]", role: "[ROLE]", os: "[OS]", ip: "[IP]", network: "[NETWORK]", services: [], status: null, x: 52, y: 50, kind: "switch" },
-    { id: "host-1", label: "Hôte", hostname: "[HOSTNAME]", role: "[ROLE]", os: "[OS]", ip: "[IP]", network: "[NETWORK]", services: ["[SERVICE]"], status: null, x: 76, y: 22, kind: "host" },
-    { id: "host-2", label: "Hôte", hostname: "[HOSTNAME]", role: "[ROLE]", os: "[OS]", ip: "[IP]", network: "[NETWORK]", services: ["[SERVICE]"], status: null, x: 76, y: 78, kind: "host" },
-  ] as HomelabNode[],
-  links: [
-    { from: "wan", to: "gateway" },
-    { from: "gateway", to: "lan" },
-    { from: "lan", to: "host-1" },
-    { from: "lan", to: "host-2" },
-  ] as HomelabLink[],
+  intro:
+    "Un environnement personnel pour monter, casser et remonter des infrastructures : annuaire, segmentation réseau, services et sauvegardes.",
+  tiers: [
+    { id: "internet", label: "Internet", detail: "Accès opérateur" },
+    { id: "gateway", label: "Passerelle", detail: "Pare-feu, routage, VPN" },
+    { id: "network", label: "Réseau local", detail: "Commutation et segmentation" },
+    { id: "hosts", label: "Hôtes & VM", detail: "Serveurs Windows et Linux" },
+    { id: "services", label: "Services", detail: "Annuaire, fichiers, sauvegardes" },
+  ] as Tier[],
+
+  /** Inventaire matériel : renseigner pour afficher le bloc. */
+  machines: [] as { name: string; specs: string }[],
+  /** Plan d'adressage : renseigner pour afficher le bloc. */
+  networks: [] as { name: string; cidr: string; vlan?: string }[],
 };

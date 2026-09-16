@@ -1,90 +1,104 @@
 import { company } from "@/data/profile";
 import { socials } from "@/data/socials";
+import { clientProjects } from "@/data/clientProjects";
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 import { HarmonyMark } from "@/components/ui/HarmonyMark";
-import { InView } from "@/components/ui/InView";
 import { ButtonLink } from "@/components/ui/Button";
+import { ClientGallery, type GalleryItem } from "@/components/sections/ClientGallery";
+import { resolveShot } from "@/lib/media";
 import { realValue } from "@/lib/utils";
 
-const services = [
-  { name: "Websites", text: "Sites vitrines et expériences web pour les commerces et les professionnels." },
-  { name: "Web applications", text: "Applications métier, de l'interface à la base de données." },
-  { name: "SaaS", text: "Conception de produits en abonnement, du périmètre à la mise en ligne." },
-  { name: "IT support", text: "Assistance informatique, postes de travail, comptes et accès." },
-  { name: "Systems", text: "Administration de serveurs Windows et Linux, annuaire, sauvegardes." },
-  { name: "Networks", text: "Réseaux locaux, segmentation, pare-feu et interconnexion de sites." },
-];
-
-const principles = [
-  { title: "Comprendre la couche du dessous", text: "Une interface fiable repose sur un réseau, un serveur et des données correctement administrés." },
-  { title: "Documenter ce qui est construit", text: "Un schéma, une procédure, un inventaire. Ce qui n'est pas documenté ne se maintient pas." },
-  { title: "Dire où en est un projet", text: "Un prototype reste un prototype. Ce qui fonctionne est séparé de ce qui est prévu." },
-  { title: "Garder peu de pièces mobiles", text: "Moins de dépendances, moins de configuration, moins de pannes à diagnostiquer." },
+const SERVICES = [
+  { name: "Sites internet", text: "Sites vitrines pensés pour être trouvés, lus et contactés." },
+  { name: "Applications web", text: "Outils sur mesure, accessibles depuis un navigateur." },
+  { name: "SaaS & outils métier", text: "Plateformes complètes : comptes, données, facturation." },
+  { name: "Support informatique", text: "Assistance, dépannage et suivi du parc." },
+  { name: "Systèmes & réseaux", text: "Installation, sécurisation et documentation de l'infrastructure." },
 ];
 
 export function Harmony() {
-  const harmonyUrl = realValue(socials.harmonyUrl);
+  const items: GalleryItem[] = clientProjects
+    .map((c) => {
+      const url = realValue(c.url);
+      const src = resolveShot(c.screenshot.src, `/clients/${c.slug}/home`);
+      if (!url || !src) return null;
+      return {
+        name: c.name,
+        slug: c.slug,
+        sector: c.sector,
+        location: c.location ?? null,
+        url,
+        src,
+        alt: c.screenshot.alt,
+      };
+    })
+    .filter((x): x is GalleryItem => Boolean(x));
+
   return (
-    <section id="harmony" data-nav="harmony" aria-labelledby="harmony-title" className="border-t border-line bg-ink-1/30 py-24 md:py-36">
-      <Container>
-        <div className="grid gap-14 lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-4">
-            <InView>
-              <HarmonyMark draw className="h-auto w-28 md:w-40" strokeWidth={16} />
-            </InView>
-            <p className="mt-10 font-serif text-[2rem] leading-none tracking-[0.18em] text-fg">HARMONY</p>
-            <p className="mt-3 text-body text-fg-2">{company.name}</p>
-            <p className="text-small text-fg-3">{company.activity}</p>
-            <dl className="mt-8 space-y-1 font-mono text-tech">
-              <div className="flex gap-3">
-                <dt className="text-fg-3">SIREN</dt>
-                <dd className="text-fg-2">{company.siren}</dd>
-              </div>
-              <div className="flex gap-3">
-                <dt className="text-fg-3">Siège</dt>
-                <dd className="text-fg-2">
-                  {company.address.city} ({company.address.postalCode.slice(0, 2)})
-                </dd>
-              </div>
-            </dl>
-            {harmonyUrl && (
-              <ButtonLink href={harmonyUrl} external className="mt-8">
-                Harmony Solutions
-              </ButtonLink>
-            )}
-          </div>
-
-          <div className="lg:col-span-8">
-            <h2 id="harmony-title" className="max-w-[16ch] text-h1 text-fg">
-              Technology turned into solutions.
-            </h2>
-            <p className="mt-6 max-w-[54ch] text-body-lg text-fg-2">
-              Harmony Solutions est la structure qui porte mon activité : les compétences systèmes, réseaux et web appliquées aux besoins de professionnels.
+    <section id="harmony" data-nav="harmony" className="bg-paper-3">
+      {/* Plaque de marque */}
+      <div className="on-navy py-20 md:py-28">
+        <Container>
+          <Reveal className="grid gap-10 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <HarmonyMark className="h-16 w-auto text-brass md:h-20" />
+              <h2 className="mt-9 text-h1">Harmony Solutions</h2>
+            </div>
+            <p className="max-w-[40ch] text-lede text-ink-2 lg:col-span-5 lg:pb-3">
+              Des solutions numériques conçues pour les professionnels.
             </p>
+          </Reveal>
+        </Container>
+      </div>
 
-            <dl className="mt-14 grid gap-x-10 sm:grid-cols-2">
-              {services.map((s) => (
-                <div key={s.name} className="border-t border-line py-5">
-                  <dt className="text-h3 text-fg">{s.name}</dt>
-                  <dd className="mt-1.5 max-w-[40ch] text-small text-fg-2">{s.text}</dd>
-                </div>
-              ))}
-            </dl>
+      {/* Présentation éditoriale */}
+      <Container className="py-24 md:py-32">
+        <Reveal className="grid gap-12 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-5">
+            <p className="text-lede text-ink">
+              Harmony Solutions est mon activité dédiée à la création de solutions web et informatiques pour les
+              entreprises, les indépendants et les commerces.
+            </p>
+            <p className="mt-6 font-mono text-tech uppercase tracking-[0.16em] text-ink-3">
+              {company.activity} — {company.address.city}
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <ButtonLink href={`mailto:${socials.email}`} variant="primary">
+                Échanger
+              </ButtonLink>
+              {realValue(socials.harmonyUrl) && (
+                <ButtonLink href={socials.harmonyUrl} external>
+                  Le site Harmony
+                </ButtonLink>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="mt-24 md:mt-32">
-          <h2 className="text-h2 text-fg">Principles I build by.</h2>
-          <ul className="mt-10 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-            {principles.map((p) => (
-              <li key={p.title}>
-                <p className="text-body-lg text-fg">{p.title}</p>
-                <p className="mt-2 text-small text-fg-2">{p.text}</p>
+          <ol className="lg:col-span-6 lg:col-start-7">
+            {SERVICES.map((s, i) => (
+              <li key={s.name} className="flex items-baseline gap-6 border-b border-line py-5 first:border-t">
+                <span className="font-mono text-tech text-ink-3">{String(i + 1).padStart(2, "0")}</span>
+                <span className="flex-1">
+                  <span className="block text-h3 text-ink">{s.name}</span>
+                  <span className="mt-1 block text-small text-ink-2">{s.text}</span>
+                </span>
               </li>
             ))}
-          </ul>
-        </div>
+          </ol>
+        </Reveal>
       </Container>
+
+      {/* Réalisations */}
+      {items.length > 0 && (
+        <div className="bg-paper pb-24 pt-20 md:pb-32 md:pt-24">
+          <Container>
+            <Reveal>
+              <ClientGallery items={items} />
+            </Reveal>
+          </Container>
+        </div>
+      )}
     </section>
   );
 }

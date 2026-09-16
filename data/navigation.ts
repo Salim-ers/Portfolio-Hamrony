@@ -1,11 +1,8 @@
 export const navigation = [
-  { id: "overview", label: "Overview" },
-  { id: "projects", label: "Projects" },
-  { id: "infrastructure", label: "Infrastructure" },
-  { id: "homelab", label: "Home Lab" },
-  { id: "journey", label: "Journey" },
-  { id: "stack", label: "Stack" },
-  { id: "harmony", label: "Harmony" },
+  { id: "projets", label: "Projets" },
+  { id: "expertises", label: "Expertises" },
+  { id: "parcours", label: "Parcours" },
+  { id: "harmony", label: "Harmony Solutions" },
   { id: "contact", label: "Contact" },
 ] as const;
 

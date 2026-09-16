@@ -2,51 +2,43 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowUpRight, CornerDownLeft, Search } from "lucide-react";
+import { CornerDownLeft, Search } from "lucide-react";
 import { useOverlay } from "./OverlayProvider";
 import { socials } from "@/data/socials";
 import { projects } from "@/data/projects";
-import { isPlaceholder, cn } from "@/lib/utils";
+import { navigation } from "@/data/navigation";
+import { cn, isPlaceholder } from "@/lib/utils";
 
-type Action = { id: string; label: string; group: string; hint?: string; disabled?: boolean; run: () => void };
-
-function goTo(id: string, router: ReturnType<typeof useRouter>) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    history.replaceState(null, "", `#${id}`);
-  } else {
-    router.push(`/#${id}`);
-  }
-}
+type Action = { id: string; label: string; group: string; hint?: string; run: () => void };
 
 export function CommandPalette({ open }: { open: boolean }) {
-  const { close, open: openOverlay } = useOverlay();
+  const { close } = useOverlay();
   const router = useRouter();
-  const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const [copied, setCopied] = useState(false);
 
   const actions = useMemo<Action[]>(() => {
-    const nav = (id: string, label: string): Action => ({ id: `go-${id}`, label, group: "Navigation", run: () => goTo(id, router) });
-    const external = (id: string, label: string, url: string): Action => ({
-      id,
-      label,
-      group: "Liens",
-      hint: isPlaceholder(url) ? "Lien à venir" : undefined,
-      disabled: isPlaceholder(url),
-      run: () => window.open(url, "_blank", "noopener,noreferrer"),
-    });
+    const goTo = (id: string) => () => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        history.replaceState(null, "", `#${id}`);
+      } else {
+        router.push(`/#${id}`);
+      }
+    };
     return [
-      nav("projects", "Go to Projects"),
-      nav("infrastructure", "Go to Infrastructure"),
-      nav("homelab", "Go to Home Lab"),
-      nav("journey", "Go to Journey"),
-      nav("stack", "Go to Skills"),
-      nav("harmony", "Go to Harmony"),
-      nav("contact", "Contact"),
+      ...navigation.map<Action>((n) => ({ id: `go-${n.id}`, label: n.label, group: "Navigation", run: goTo(n.id) })),
+      { id: "go-projets", label: "Tous les produits", group: "Navigation", run: () => router.push("/projets") },
+      ...projects.map<Action>((p) => ({
+        id: `projet-${p.slug}`,
+        label: p.name,
+        group: "Projets",
+        hint: p.category ?? undefined,
+        run: () => router.push(`/projets/${p.slug}`),
+      })),
       {
         id: "copy-email",
         label: "Copier l'adresse email",
@@ -61,12 +53,11 @@ export function CommandPalette({ open }: { open: boolean }) {
           }
         },
       },
-      external("linkedin", "Open LinkedIn", socials.linkedin),
-      external("github", "Open GitHub", socials.github),
-      ...projects.map<Action>((p) => ({ id: `project-${p.slug}`, label: p.name, group: "Projets", hint: p.category ?? undefined, run: () => router.push(`/projects/${p.slug}`) })),
-      { id: "terminal", label: "Ouvrir le terminal", group: "Divers", hint: "whoami, projects, homelab…", run: () => openOverlay("terminal") },
+      ...(isPlaceholder(socials.linkedin)
+        ? []
+        : [{ id: "linkedin", label: "LinkedIn", group: "Contact", run: () => window.open(socials.linkedin, "_blank", "noopener,noreferrer") }]),
     ];
-  }, [router, openOverlay]);
+  }, [router]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -75,111 +66,99 @@ export function CommandPalette({ open }: { open: boolean }) {
   }, [actions, query]);
 
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (open && !dialog.open) {
-      dialog.showModal();
-      setQuery("");
-      setActive(0);
-      setCopied(false);
-      requestAnimationFrame(() => inputRef.current?.focus());
-    } else if (!open && dialog.open) {
-      dialog.close();
-    }
-  }, [open]);
-
-  useEffect(() => setActive(0), [query]);
-
-  function execute(a: Action | undefined) {
-    if (!a || a.disabled) return;
-    a.run();
-    if (a.id !== "copy-email" && a.id !== "terminal") close();
-  }
-
-  function onKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActive((i) => Math.min(i + 1, filtered.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActive((i) => Math.max(i - 1, 0));
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      execute(filtered[active]);
-    }
-  }
+    setActive(0);
+  }, [query]);
 
   useEffect(() => {
-    document.getElementById(`cmd-${filtered[active]?.id}`)?.scrollIntoView({ block: "nearest" });
-  }, [active, filtered]);
+    if (!open) {
+      setQuery("");
+      setCopied(false);
+      return;
+    }
+    inputRef.current?.focus();
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
-  let lastGroup = "";
+  useEffect(() => {
+    if (!copied) return;
+    const t = window.setTimeout(() => setCopied(false), 1800);
+    return () => window.clearTimeout(t);
+  }, [copied]);
+
+  if (!open) return null;
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") return close();
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActive((i) => (i + 1) % Math.max(filtered.length, 1));
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActive((i) => (i - 1 + filtered.length) % Math.max(filtered.length, 1));
+    }
+    if (e.key === "Enter" && filtered[active]) {
+      e.preventDefault();
+      const run = filtered[active].run;
+      if (filtered[active].id !== "copy-email") close();
+      run();
+    }
+  };
 
   return (
-    <dialog
-      ref={dialogRef}
-      aria-label="Command palette"
-      onCancel={(e) => {
-        e.preventDefault();
-        close();
-      }}
-      onClick={(e) => {
-        if (e.target === dialogRef.current) close();
-      }}
-      className="fixed inset-x-0 top-[12vh] m-auto h-fit max-h-[70vh] w-[min(600px,calc(100vw-2rem))] overflow-hidden rounded-md border border-line-strong bg-ink-1 p-0 text-fg shadow-[0_24px_80px_-12px_rgba(0,0,0,0.7)] backdrop:bg-ink-0/70"
+    <div
+      className="fixed inset-0 z-[var(--z-index-modal)] flex items-start justify-center bg-[rgba(17,19,24,0.32)] px-4 pt-[12vh] backdrop-blur-sm"
+      onClick={close}
     >
-      <div className="flex items-center gap-3 border-b border-line px-4">
-        <Search aria-hidden className="size-4 text-fg-3" strokeWidth={1.75} />
-        <input
-          ref={inputRef}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={onKeyDown}
-          placeholder="Rechercher une section, un projet, une action"
-          aria-label="Rechercher"
-          role="combobox"
-          aria-expanded="true"
-          aria-controls="cmd-list"
-          aria-activedescendant={filtered[active] ? `cmd-${filtered[active].id}` : undefined}
-          className="h-14 w-full bg-transparent text-body text-fg outline-none placeholder:text-fg-3"
-        />
-        <kbd className="hidden rounded-sm border border-line-strong px-1.5 py-0.5 font-mono text-[11px] text-fg-3 sm:block">Esc</kbd>
-      </div>
-      <ul id="cmd-list" role="listbox" className="max-h-[calc(70vh-3.5rem)] overflow-y-auto p-2">
-        {filtered.length === 0 && <li className="px-3 py-6 text-small text-fg-3">Aucun résultat pour « {query} ». Essayez « projects » ou « contact ».</li>}
-        {filtered.map((a, i) => {
-          const header = a.group !== lastGroup ? a.group : null;
-          lastGroup = a.group;
-          const isActive = i === active;
-          return (
-            <li key={a.id} role="presentation">
-              {header && <div className="px-3 pb-1 pt-3 text-tech text-fg-3">{header}</div>}
-              <div
-                id={`cmd-${a.id}`}
-                role="option"
-                aria-selected={isActive}
-                aria-disabled={a.disabled}
-                onMouseMove={() => setActive(i)}
-                onClick={() => execute(a)}
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Recherche"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={onKeyDown}
+        className="fade-up w-full max-w-[560px] overflow-hidden rounded-md border border-line-2 bg-paper-3 shadow-[0_40px_90px_-40px_rgba(17,19,24,0.5)]"
+      >
+        <div className="flex items-center gap-3 border-b border-line px-4">
+          <Search aria-hidden className="size-4 shrink-0 text-ink-3" strokeWidth={1.75} />
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Rechercher une section, un projet…"
+            aria-label="Rechercher"
+            className="h-14 w-full bg-transparent text-body text-ink outline-none placeholder:text-ink-3"
+          />
+          <kbd className="hidden shrink-0 font-mono text-tech text-ink-3 sm:block">ESC</kbd>
+        </div>
+
+        <ul className="max-h-[52vh] overflow-y-auto py-2">
+          {filtered.length === 0 && <li className="px-4 py-6 text-small text-ink-3">Aucun résultat pour « {query} ».</li>}
+          {filtered.map((a, i) => (
+            <li key={a.id}>
+              <button
+                type="button"
+                onMouseEnter={() => setActive(i)}
+                onClick={() => {
+                  if (a.id !== "copy-email") close();
+                  a.run();
+                }}
                 className={cn(
-                  "flex h-11 cursor-pointer items-center justify-between gap-4 rounded-sm px-3 text-small",
-                  isActive ? "bg-ink-2 text-fg" : "text-fg-2",
-                  a.disabled && "cursor-not-allowed opacity-50"
+                  "flex w-full items-center gap-3 px-4 py-2.5 text-left text-small transition-colors",
+                  i === active ? "bg-paper-2 text-ink" : "text-ink-2"
                 )}
               >
-                <span className="flex items-center gap-2 truncate">
-                  {a.label}
-                  {a.group === "Liens" && !a.disabled && <ArrowUpRight aria-hidden className="size-3.5 text-fg-3" />}
-                </span>
-                <span className="flex shrink-0 items-center gap-2 font-mono text-tech text-fg-3">
-                  {a.id === "copy-email" && copied ? <span className="text-brass">Copié</span> : a.hint}
-                  {isActive && !a.disabled && <CornerDownLeft aria-hidden className="size-3.5" />}
-                </span>
-              </div>
+                <span className="w-24 shrink-0 font-mono text-tech text-ink-3">{a.group}</span>
+                <span className="flex-1 truncate">{a.id === "copy-email" && copied ? "Adresse copiée" : a.label}</span>
+                {a.hint && <span className="hidden truncate font-mono text-tech text-ink-3 sm:block">{a.hint}</span>}
+                {i === active && <CornerDownLeft aria-hidden className="size-3.5 shrink-0 text-ink-3" strokeWidth={1.75} />}
+              </button>
             </li>
-          );
-        })}
-      </ul>
-    </dialog>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }

@@ -1,12 +1,12 @@
 /**
  * RÉALISATIONS CLIENTS, HARMONY SOLUTIONS
  * ----------------------------------------------------------------
- * Visuel affiché, par ordre de priorité :
+ * Visuel affiché, par ordre de priorité :
  *   1. capture renseignée dans `screenshot.src`
  *   2. capture déposée à l'emplacement conventionnel /public/clients/<slug>/home.(png|webp|jpg)
  *      (générée automatiquement par `npm run captures`)
  *   3. aperçu réel du site dans un cadre navigateur si `livePreview` est actif
- *   4. sinon, aucune fausse interface : la réalisation apparaît dans la liste "mise en ligne à venir"
+ *   4. sinon, aucune fausse interface : la réalisation apparaît dans la liste "mise en ligne à venir"
  */
 export type ClientProject = {
   name: string;

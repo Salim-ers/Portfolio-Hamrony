@@ -49,7 +49,7 @@ for (const t of targets) {
   try {
     await page.goto(t.url, { waitUntil: "networkidle", timeout: 45000 });
     // Bandeaux cookies : refuser si possible, pour une capture propre.
-    for (const label of ["Refuser", "Tout refuser", "Continuer sans accepter", "Accepter", "Tout accepter"]) {
+    for (const label of ["Refuser", "Tout refuser", "Sans façon", "Continuer sans accepter", "Accepter", "Tout accepter"]) {
       const btn = page.getByRole("button", { name: label, exact: true });
       if (await btn.count()) {
         await btn.first().click({ timeout: 2000 }).catch(() => {});

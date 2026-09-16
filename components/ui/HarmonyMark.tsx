@@ -1,4 +1,4 @@
-/** Monogramme Harmony redessiné en traits (d'après le logo) pour un rendu net sur fond sombre. */
+/** Monogramme Harmony redessiné en traits (d'après le logo). Prend la couleur du texte courant. */
 const PATHS = [
   "M45 62H250",
   "M295 62H500",
@@ -15,7 +15,7 @@ const PATHS = [
 export function HarmonyMark({ className, title = "Harmony Solutions", strokeWidth = 22, draw = false, decorative = false }: { className?: string; title?: string; strokeWidth?: number; draw?: boolean; decorative?: boolean }) {
   return (
     <svg viewBox="30 48 485 418" className={className} fill="none" {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": title })}>
-      <g stroke="var(--color-brass)" strokeWidth={strokeWidth} strokeLinecap="square" strokeLinejoin="miter">
+      <g stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="square" strokeLinejoin="miter">
         {PATHS.map((d, i) => (
           <path key={d} d={d} pathLength={1} className={draw ? "draw-when-visible" : undefined} style={draw ? { ["--delay" as string]: `${i * 70}ms` } : undefined} />
         ))}

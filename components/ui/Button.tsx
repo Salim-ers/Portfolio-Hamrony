@@ -5,11 +5,12 @@ import { cn } from "@/lib/utils";
 type Variant = "primary" | "secondary" | "quiet";
 
 const base =
-  "press inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-sm px-5 text-label select-none disabled:pointer-events-none disabled:opacity-40";
+  "press inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-sm px-6 text-label select-none disabled:pointer-events-none disabled:opacity-40";
+
 const variants: Record<Variant, string> = {
-  primary: "bg-brass text-brass-ink hover:bg-brass-hi",
-  secondary: "border border-line-strong text-fg hover:border-fg-3 hover:bg-ink-2",
-  quiet: "px-0 h-auto text-fg-2 hover:text-fg",
+  primary: "bg-accent text-white hover:bg-accent-hi",
+  secondary: "border border-line-2 text-ink hover:border-ink hover:bg-paper-3",
+  quiet: "h-auto px-0 text-ink-2 hover:text-accent",
 };
 
 export function ButtonLink({

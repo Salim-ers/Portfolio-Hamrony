@@ -1,35 +1,25 @@
 import { Hero } from "@/components/sections/Hero";
-import { Layers } from "@/components/sections/Layers";
+import { Universes } from "@/components/sections/Universes";
 import { SelectedWork } from "@/components/sections/SelectedWork";
-import { Infrastructure } from "@/components/sections/Infrastructure";
-import { HomeLab } from "@/components/sections/HomeLab";
-import { Journey } from "@/components/sections/Journey";
-import { Stack } from "@/components/sections/Stack";
-import { ProductIndex } from "@/components/sections/ProductIndex";
-import { ClientWork } from "@/components/sections/ClientWork";
+import { Engineering } from "@/components/sections/Engineering";
+import { Parcours } from "@/components/sections/Parcours";
 import { Harmony } from "@/components/sections/Harmony";
-import { CurrentlyBuilding } from "@/components/sections/CurrentlyBuilding";
 import { Contact } from "@/components/sections/Contact";
 
 /**
- * Narration : systèmes → réseaux → infrastructure → home lab → parcours
- * → interfaces et produits → Harmony Solutions → contact.
- * Les projets phares arrivent tôt ; l'index complet suit la stack.
+ * Une seule narration :
+ * 01 hero — 02 trois univers — 03 projets sélectionnés — 04 ingénierie IT & laboratoire
+ * — 05 parcours & environnement technique — 06 Harmony Solutions — 07 contact.
  */
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <Layers />
+      <Universes />
       <SelectedWork />
-      <Infrastructure />
-      <HomeLab />
-      <Journey />
-      <Stack />
-      <ProductIndex />
-      <ClientWork />
+      <Engineering />
+      <Parcours />
       <Harmony />
-      <CurrentlyBuilding />
       <Contact />
     </>
   );
