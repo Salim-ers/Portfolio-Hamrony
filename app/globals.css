@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Harmony design tokens
+   Palette dérivée de l'identité Harmony (marine + laiton du logo),
+   assombrie pour un usage écran. Un seul accent : le laiton.
+------------------------------------------------------------------ */
+@theme {
+  --color-ink-0: #080c14;       /* fond profond */
+  --color-ink-1: #0c121c;       /* surface secondaire */
+  --color-ink-2: #121a27;       /* surface élevée */
+  --color-line: #1c2533;        /* bordure subtile */
+  --color-line-strong: #2a3444; /* bordure appuyée */
+  --color-fg: #ebe7df;          /* texte primaire */
+  --color-fg-2: #aab0bb;        /* texte secondaire */
+  --color-fg-3: #7f8795;        /* texte muted (AA sur ink-0) */
+  --color-brass: #c9994f;       /* accent Harmony */
+  --color-brass-hi: #dcb06c;
+  --color-brass-ink: #1b1307;
+  --color-ok: #8cb89b;          /* état "en ligne", usage sémantique uniquement */
+
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+  --font-serif: var(--font-cormorant), "Iowan Old Style", Georgia, serif;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Échelle typographique (ratio >= 1.25) */
+  --text-display: clamp(3.1rem, 7.4vw, 6rem);
+  --text-display--line-height: 0.94;
+  --text-display--letter-spacing: -0.038em;
+  --text-display--font-weight: 620;
+
+  --text-h1: clamp(2.4rem, 5.2vw, 4.25rem);
+  --text-h1--line-height: 1;
+  --text-h1--letter-spacing: -0.032em;
+  --text-h1--font-weight: 600;
+
+  --text-h2: clamp(1.75rem, 3.1vw, 2.5rem);
+  --text-h2--line-height: 1.06;
+  --text-h2--letter-spacing: -0.024em;
+  --text-h2--font-weight: 580;
+
+  --text-h3: 1.375rem;
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.012em;
+  --text-h3--font-weight: 560;
+
+  --text-body-lg: 1.1875rem;
+  --text-body-lg--line-height: 1.55;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.35;
+  --text-label--font-weight: 520;
+
+  --text-tech: 0.75rem;
+  --text-tech--line-height: 1.4;
+  --text-tech--letter-spacing: 0.01em;
+
+  /* Échelle z-index sémantique */
+  --z-index-sticky: 30;
+  --z-index-overlay: 50;
+  --z-index-modal: 60;
+  --z-index-toast: 70;
+}
+
+@layer base {
+  html {
+    background: var(--color-ink-0);
+    color: var(--color-fg);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    min-height: 100dvh;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--color-brass); color: var(--color-brass-ink); }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  [id] { scroll-margin-top: 88px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Motion language : 4 familles
+   draw  : tracé des liaisons (entrée des diagrammes)
+   flow  : circulation sur une liaison active (données, tunnel)
+   focus : mise en avant d'un élément, atténuation du reste
+   press : retour tactile des contrôles
+------------------------------------------------------------------ */
+@layer components {
+  .draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw 1100ms var(--ease-in-out) forwards;
+    animation-delay: var(--delay, 0ms);
+  }
+  .draw-when-visible { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  [data-visible="true"] .draw-when-visible {
+    animation: draw 1100ms var(--ease-in-out) forwards;
+    animation-delay: var(--delay, 0ms);
+  }
+  .appear {
+    opacity: 0;
+    animation: appear 500ms var(--ease-out) forwards;
+    animation-delay: var(--delay, 0ms);
+  }
+  .flow {
+    stroke-dasharray: 0.035 0.965;
+    animation: flow var(--flow-duration, 2400ms) linear infinite;
+  }
+  .flow-reverse {
+    stroke-dasharray: 0.035 0.965;
+    animation: flow-reverse var(--flow-duration, 2400ms) linear infinite;
+  }
+  .press { transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), color 160ms var(--ease-out), border-color 160ms var(--ease-out); }
+  .press:active { transform: scale(0.97); }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 240ms var(--ease-out), color 160ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .link-underline:hover { background-size: 100% 1px; }
+  }
+  .link-underline:focus-visible { background-size: 100% 1px; }
+
+  /* Groupe "focus" : survol d'un élément, atténuation des voisins */
+  @media (hover: hover) and (pointer: fine) {
+    .focus-group:has(.focus-item:hover) .focus-item:not(:hover) { opacity: 0.38; }
+  }
+  .focus-item { transition: opacity 220ms var(--ease-out); }
+
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+}
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes appear { to { opacity: 1; } }
+@keyframes flow { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes flow-reverse { from { stroke-dashoffset: 0; } to { stroke-dashoffset: 1; } }
+@keyframes marker-travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .draw, [data-visible="true"] .draw-when-visible { animation: none; stroke-dashoffset: 0; stroke-dasharray: none; }
+  .draw-when-visible { stroke-dashoffset: 0; stroke-dasharray: none; }
+  .appear { animation: none; opacity: 1; }
+  .flow, .flow-reverse { animation: none; opacity: 0; }
+  .press:active { transform: none; }
+  *, *::before, *::after { transition-duration: 1ms !important; }
+}
