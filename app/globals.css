@@ -1,82 +1,59 @@
 @import "tailwindcss";
 
-/* ------------------------------------------------------------------
-   Harmony — design system V2
-   Identité reprise du logo Harmony Solutions : marine profond + laiton.
-   Le site est clair par défaut (papier ivoire). Le marine sert de rupture
-   ponctuelle, le laiton n'apparaît que sur ces fonds sombres.
-   Un seul accent interactif : le bleu Harmony.
------------------------------------------------------------------- */
+/* ==================================================================
+   DEUX PRATIQUES, UNE MÊME SIGNATURE
+   ------------------------------------------------------------------
+   Une seule identité typographique et un seul rythme de composition
+   relient les deux univers. Tout le reste — fond, encre, accent,
+   densité, interactions — bascule avec l'attribut [data-universe].
+
+     data-universe="creation" → ivoire, encre, accent vermillon
+     data-universe="systems"  → graphite, texte clair, accent bleu
+
+   Les composants n'utilisent jamais une couleur en dur : ils lisent
+   --paper / --ink / --accent, ce qui rend n'importe quel bloc
+   réutilisable dans les deux ambiances.
+================================================================== */
+
 @theme {
-  /* Fonds clairs */
-  --color-paper: #f7f7f4;       /* fond principal */
-  --color-paper-2: #f1f0ea;     /* bande alternée */
-  --color-paper-3: #ffffff;     /* carte, surface élevée */
-
-  /* Encre */
-  --color-ink: #111318;         /* texte principal */
-  --color-ink-2: #555a64;       /* texte secondaire (AA sur papier) */
-  --color-ink-3: #7c828d;       /* texte tertiaire */
-  --color-line: #e4e3db;        /* filet */
-  --color-line-2: #cecdc3;      /* filet appuyé */
-
-  /* Marine Harmony — sections de rupture */
-  --color-navy: #16243f;
-  --color-navy-2: #1d3053;
-  --color-navy-3: #24395f;
-  --color-navy-line: #2d4165;
-  --color-navy-fg: #eef1f6;
-  --color-navy-fg-2: #a9b6cb;
-  --color-navy-fg-3: #8394ae;
-
-  /* Accents */
-  --color-accent: #1b3f8b;      /* bleu Harmony, interactif sur fond clair */
-  --color-accent-hi: #2a58b4;
-  --color-accent-soft: #e7ecf7;
-  --color-brass: #c9994f;       /* laiton du logo, réservé au marine */
-  --color-brass-deep: #9d7133;
-
   --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
   --font-serif: var(--font-cormorant), "Iowan Old Style", Georgia, serif;
 
-  --radius-sm: 2px;
-  --radius-md: 4px;
-
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
 
-  /* Échelle typographique éditoriale */
-  --text-mega: clamp(3.4rem, 11vw, 9.5rem);
-  --text-mega--line-height: 0.88;
+  /* --- Échelle typographique commune aux deux univers --- */
+  --text-mega: clamp(3.1rem, 10.5vw, 9rem);
+  --text-mega--line-height: 0.86;
   --text-mega--letter-spacing: -0.045em;
   --text-mega--font-weight: 600;
 
-  --text-display: clamp(2.9rem, 7vw, 5.75rem);
-  --text-display--line-height: 0.95;
+  --text-display: clamp(2.6rem, 6.6vw, 5.25rem);
+  --text-display--line-height: 0.94;
   --text-display--letter-spacing: -0.04em;
   --text-display--font-weight: 600;
 
-  --text-h1: clamp(2.25rem, 4.8vw, 3.9rem);
+  --text-h1: clamp(2.1rem, 4.6vw, 3.6rem);
   --text-h1--line-height: 1.02;
   --text-h1--letter-spacing: -0.033em;
   --text-h1--font-weight: 600;
 
-  --text-h2: clamp(1.7rem, 3vw, 2.4rem);
-  --text-h2--line-height: 1.08;
+  --text-h2: clamp(1.6rem, 2.9vw, 2.3rem);
+  --text-h2--line-height: 1.1;
   --text-h2--letter-spacing: -0.025em;
   --text-h2--font-weight: 580;
 
-  --text-h3: 1.3125rem;
-  --text-h3--line-height: 1.25;
+  --text-h3: 1.28rem;
+  --text-h3--line-height: 1.28;
   --text-h3--letter-spacing: -0.012em;
   --text-h3--font-weight: 560;
 
-  --text-lede: clamp(1.125rem, 1.5vw, 1.375rem);
-  --text-lede--line-height: 1.5;
+  --text-lede: clamp(1.1rem, 1.45vw, 1.35rem);
+  --text-lede--line-height: 1.52;
 
-  --text-body-lg: 1.125rem;
-  --text-body-lg--line-height: 1.6;
+  --text-body-lg: 1.0625rem;
+  --text-body-lg--line-height: 1.62;
 
   --text-body: 1rem;
   --text-body--line-height: 1.62;
@@ -89,42 +66,142 @@
   --text-label--font-weight: 520;
 
   --text-tech: 0.75rem;
-  --text-tech--line-height: 1.4;
-  --text-tech--letter-spacing: 0.02em;
+  --text-tech--line-height: 1.45;
+  --text-tech--letter-spacing: 0.04em;
 
-  --z-index-sticky: 30;
-  --z-index-overlay: 50;
-  --z-index-modal: 60;
+  /* Couleurs exposées à Tailwind. Les valeurs réelles sont définies
+     plus bas, par univers. */
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+
+  --z-index-sticky: 40;
+  --z-index-overlay: 60;
+}
+
+/* ------------------------------------------------------------------
+   Thèmes d'univers
+------------------------------------------------------------------ */
+:root,
+[data-universe="creation"] {
+  /* Ivoire et encre. Le vermillon ne sert qu'aux signaux : filet,
+     numéro, soulignement, état actif. */
+  --paper: #f5f2ea;
+  --paper-2: #ece7db;
+  --surface: #fffefb;
+  --ink: #17140f;
+  --ink-2: #4f4a42;   /* 8.4:1 sur ivoire */
+  --ink-3: #736c60;   /* 5.1:1 sur ivoire */
+  --line: #ded6c6;
+  --line-2: #c4baa6;
+  --accent: #cf3f1e;        /* filets, traits, aplats décoratifs */
+  --accent-ink: #a52d10;    /* 5.4:1 sur ivoire — texte et liens */
+  --accent-soft: #f6e3dc;
+  --on-accent: #fffefb;
+  --shadow-soft: 0 1px 2px rgb(23 20 15 / 0.05), 0 12px 32px -14px rgb(23 20 15 / 0.22);
+
+  /* Réexposition locale des alias Tailwind : une variable est résolue là
+     où elle est déclarée. Sans ces lignes, `bg-paper` ou `text-ink`
+     resteraient figés sur les valeurs de :root et le thème ne
+     s'appliquerait pas au sous-arbre. */
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  color-scheme: light;
+}
+
+[data-universe="systems"] {
+  /* Graphite et bleu électrique. Fond sombre, texte clair, filets nets. */
+  --paper: #121419;
+  --paper-2: #181b21;
+  --surface: #1c2027;
+  --ink: #edf0f5;
+  --ink-2: #a9b2c0;   /* 8.0:1 sur graphite */
+  --ink-3: #7e8899;   /* 5.0:1 sur graphite */
+  --line: #262b34;
+  --line-2: #363d49;
+  --accent: #4f8cff;
+  --accent-ink: #78a8ff;    /* 7.3:1 sur graphite — texte et liens */
+  --accent-soft: #1a2436;
+  --on-accent: #0a0d13;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.4), 0 18px 44px -18px rgb(0 0 0 / 0.7);
+
+  /* Réexposition locale des alias Tailwind : une variable est résolue là
+     où elle est déclarée. Sans ces lignes, `bg-paper` ou `text-ink`
+     resteraient figés sur les valeurs de :root et le thème ne
+     s'appliquerait pas au sous-arbre. */
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  color-scheme: dark;
 }
 
 @layer base {
   html {
-    background: var(--color-paper);
-    color: var(--color-ink);
-    color-scheme: light;
+    background: var(--paper);
+    color: var(--ink);
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  /* L'univers est porté par un conteneur dans la page, mais la couleur de
+     fond du document doit suivre : sinon l'ivoire réapparaît au rebond de
+     défilement sur les pages graphite. `:has` résout cela sans JavaScript.
+     La règle « creation » vient en dernier : sur la porte d'entrée, où les
+     deux univers coexistent, c'est l'ivoire qui l'emporte. */
+  html:has([data-universe="systems"]) { background: #121419; color-scheme: dark; }
+  html:has([data-universe="creation"]) { background: #f5f2ea; color-scheme: light; }
+
   body {
+    background: transparent;
+    color: var(--ink);
     font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: 1.62;
     min-height: 100dvh;
     overflow-x: hidden;
     font-feature-settings: "ss01", "cv11";
+    transition: background-color 420ms var(--ease-out), color 420ms var(--ease-out);
   }
   h1, h2, h3 { text-wrap: balance; }
   p { text-wrap: pretty; }
-  ::selection { background: var(--color-accent); color: #fff; }
+  ::selection { background: var(--accent); color: var(--on-accent); }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--accent-ink);
     outline-offset: 3px;
     border-radius: 2px;
   }
-  [id] { scroll-margin-top: 92px; }
+  [id] { scroll-margin-top: 96px; }
+  img { max-width: 100%; height: auto; }
 
   @media (prefers-reduced-motion: no-preference) {
     html { scroll-behavior: smooth; }
@@ -132,52 +209,112 @@
 }
 
 @layer components {
-  /* Zone marine : inverse les rôles de couleur pour tout le sous-arbre. */
-  .on-navy {
-    background: var(--color-navy);
-    color: var(--color-navy-fg);
-    --color-ink: var(--color-navy-fg);
-    --color-ink-2: var(--color-navy-fg-2);
-    --color-ink-3: var(--color-navy-fg-3);
-    --color-line: var(--color-navy-line);
-    --color-line-2: #3d5578;
-    --color-accent: var(--color-brass);
-    --color-accent-hi: #dcb06c;
-    --color-paper: var(--color-navy);
-    --color-paper-2: var(--color-navy-2);
-    --color-paper-3: var(--color-navy-2);
-    color-scheme: dark;
-  }
-  .on-navy ::selection { background: var(--color-brass); color: var(--color-navy); }
 
-  /* --- Motion : 4 familles seulement --- */
-  .draw-when-visible { stroke-dasharray: 1; stroke-dashoffset: 1; }
-  [data-visible="true"] .draw-when-visible {
-    animation: draw 1200ms var(--ease-in-out) forwards;
+  /* =============================================================
+     GARDE-FOU : tous les états « masqués » ci-dessous sont portés par
+     [data-motion="on"], attribut posé sur <html> par un script inline
+     seulement si le JavaScript s'exécute ET que l'utilisateur n'a pas
+     demandé moins d'animations. Sans JavaScript, sans ce script ou avec
+     prefers-reduced-motion, rien n'est masqué : tout le contenu est
+     lisible immédiatement, dans son état final.
+  ============================================================= */
+
+  /* =============================================================
+     1. Entrée du hero par groupes de mots.
+     Le texte est dans le DOM et lisible même si l'animation échoue.
+  ============================================================= */
+  .word-mask { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.09em; }
+  [data-motion="on"] .word-mask > span {
+    display: inline-block;
+    transform: translateY(105%);
+    animation: word-up 780ms var(--ease-out) forwards;
     animation-delay: var(--delay, 0ms);
   }
-  .reveal {
+  @keyframes word-up { to { transform: translateY(0); } }
+
+  [data-motion="on"] .lift-in {
     opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 760ms var(--ease-out), transform 760ms var(--ease-out);
+    transform: translateY(14px);
+    animation: lift-in 600ms var(--ease-out) forwards;
+    animation-delay: var(--delay, 0ms);
+  }
+  @keyframes lift-in { to { opacity: 1; transform: none; } }
+
+  /* =============================================================
+     2. Révélation au défilement : quatre familles distinctes,
+     pour ne jamais rejouer le même effet deux sections de suite.
+  ============================================================= */
+
+  /* a. masque vertical — réservé aux captures.
+     Le clip est porté par le conteneur, l'agrandissement par son contenu :
+     si l'élément qui clippe s'agrandissait lui-même, il déborderait de la
+     page en pleine largeur. */
+  [data-motion="on"] .mask-in {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 900ms var(--ease-in-out);
+  }
+  [data-motion="on"] .mask-in > * {
+    transform: scale(1.04);
+    transition: transform 1100ms var(--ease-out);
+  }
+  [data-visible="true"] .mask-in,
+  .mask-in[data-visible="true"] { clip-path: inset(0 0 0 0); }
+  [data-visible="true"] .mask-in > *,
+  .mask-in[data-visible="true"] > * { transform: none; }
+
+  /* b. filet qui se trace — titres de section et séparateurs */
+  [data-motion="on"] .rule-in { transform: scaleX(0); transform-origin: left; transition: transform 700ms var(--ease-in-out); }
+  [data-visible="true"] .rule-in,
+  .rule-in[data-visible="true"] { transform: scaleX(1); }
+
+  /* c. glissement latéral — colonnes éditoriales */
+  [data-motion="on"] .slide-in {
+    opacity: 0;
+    transform: translateX(var(--from, -18px));
+    transition: opacity 620ms var(--ease-out), transform 720ms var(--ease-out);
     transition-delay: var(--delay, 0ms);
   }
-  [data-visible="true"] .reveal,
-  .reveal[data-visible="true"] { opacity: 1; transform: none; }
-
-  .flow {
-    stroke-dasharray: 0.04 0.96;
-    animation: flow var(--flow-duration, 3200ms) linear infinite;
+  [data-visible="true"] .slide-in,
+  .slide-in[data-visible="true"] { opacity: 1; transform: none; }
+  /* Sous 768px les gouttières sont trop étroites pour un décalage
+     latéral : il déborderait de la page. On passe à une montée. */
+  @media (max-width: 767px) {
+    [data-motion="on"] .slide-in { transform: translateY(16px); }
   }
-  .press { transition: transform 160ms var(--ease-out), background-color 180ms var(--ease-out), color 180ms var(--ease-out), border-color 180ms var(--ease-out); }
-  .press:active { transform: scale(0.98); }
+
+  /* d. montée simple — listes et détails techniques */
+  [data-motion="on"] .rise-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 560ms var(--ease-out), transform 640ms var(--ease-out);
+    transition-delay: var(--delay, 0ms);
+  }
+  [data-visible="true"] .rise-in,
+  .rise-in[data-visible="true"] { opacity: 1; transform: none; }
+
+  /* =============================================================
+     3. Profondeur légère — souris et écran fin uniquement
+  ============================================================= */
+  .depth-layer { transition: transform 480ms var(--ease-out); }
+  @media (hover: hover) and (pointer: fine) {
+    .depth { perspective: 1200px; }
+    .depth-layer {
+      transform: rotateX(calc(var(--py, 0) * -3.2deg)) rotateY(calc(var(--px, 0) * 4deg));
+    }
+  }
+
+  /* =============================================================
+     4. Retours d'interaction
+  ============================================================= */
+  .press { transition: transform 150ms var(--ease-out), background-color 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out), opacity 200ms var(--ease-out); }
+  .press:active { transform: scale(0.975); }
 
   .link-underline {
     background-image: linear-gradient(currentColor, currentColor);
     background-size: 0% 1px;
     background-position: 0 100%;
     background-repeat: no-repeat;
-    transition: background-size 280ms var(--ease-out), color 160ms var(--ease-out);
+    transition: background-size 320ms var(--ease-out), color 160ms var(--ease-out);
   }
   @media (hover: hover) and (pointer: fine) {
     .link-underline:hover { background-size: 100% 1px; }
@@ -185,36 +322,83 @@
   .link-underline:focus-visible { background-size: 100% 1px; }
 
   @media (hover: hover) and (pointer: fine) {
-    .focus-group:has(.focus-item:hover) .focus-item:not(:hover) { opacity: 0.42; }
+    .focus-group:has(.focus-item:hover) .focus-item:not(:hover) { opacity: 0.4; }
   }
-  .focus-item { transition: opacity 260ms var(--ease-out); }
+  .focus-item { transition: opacity 280ms var(--ease-out); }
 
-  /* Apparition au montage (changement d'onglet, filtre) */
-  .fade-up {
-    animation: fade-up 520ms var(--ease-out) backwards;
+  /* =============================================================
+     5. Schémas techniques — tracé et flux.
+     Le flux illustre un principe de fonctionnement : il ne représente
+     aucune mesure et n'est jamais une supervision réelle.
+  ============================================================= */
+  [data-motion="on"] .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  [data-visible="true"] .draw {
+    animation: draw 1100ms var(--ease-in-out) forwards;
     animation-delay: var(--delay, 0ms);
   }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .flow {
+    stroke-dasharray: 0.05 0.95;
+    animation: flow var(--flow-duration, 3000ms) linear infinite;
+  }
+  @keyframes flow { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+  /* =============================================================
+     6. Utilitaires de composition
+  ============================================================= */
+  .fade-up {
+    animation: fade-up 460ms var(--ease-out) backwards;
+    animation-delay: var(--delay, 0ms);
+  }
+  @keyframes fade-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* Ouverture d'une étude de cas : la carte se rapproche brièvement
+     avant que la page ne prenne le relais. */
+  [data-work-card] { transition: transform 220ms var(--ease-out), opacity 220ms var(--ease-out); }
+  [data-work-card][data-opening="true"] { transform: scale(1.012); opacity: 0.72; }
 
   .scrollbar-none { scrollbar-width: none; }
   .scrollbar-none::-webkit-scrollbar { display: none; }
 
-  /* Filets de grille discrets, utilisés en fond de composition */
+  /* Colonnes de repère, en fond de composition éditoriale */
   .grid-rule {
-    background-image: linear-gradient(to right, var(--color-line) 1px, transparent 1px);
+    background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
     background-size: 25% 100%;
   }
 }
 
-@keyframes draw { to { stroke-dashoffset: 0; } }
-@keyframes flow { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-@keyframes fade-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+/* ==================================================================
+   Transitions de page natives (View Transitions API).
+   Amélioration progressive : sans support, la navigation reste
+   instantanée et le contenu complet.
+================================================================== */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root) { animation: vt-out 200ms var(--ease-out) both; }
+::view-transition-new(root) { animation: vt-in 360ms var(--ease-out) both; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }
+
+/* Le panneau choisi devient le cadre de la page suivante. */
+::view-transition-group(universe-panel) { animation-duration: 520ms; animation-timing-function: var(--ease-in-out); }
+::view-transition-group(work-shot) { animation-duration: 460ms; animation-timing-function: var(--ease-in-out); }
+::view-transition-old(work-shot),
+::view-transition-new(work-shot) { animation: none; mix-blend-mode: normal; height: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-visible="true"] .draw-when-visible { animation: none; stroke-dashoffset: 0; stroke-dasharray: none; }
-  .draw-when-visible { stroke-dashoffset: 0; stroke-dasharray: none; }
-  .reveal { opacity: 1; transform: none; transition: none; }
-  .fade-up { animation: none; }
-  .flow { animation: none; opacity: 0; }
+  @view-transition { navigation: none; }
+
+  .word-mask > span,
+  .lift-in,
+  .fade-up { animation: none; opacity: 1; transform: none; }
+  .mask-in, .mask-in > * { clip-path: none; transform: none; transition: none; }
+  .rule-in { transform: scaleX(1); transition: none; }
+  .slide-in, .rise-in { opacity: 1; transform: none; transition: none; }
+  .draw, [data-visible="true"] .draw { animation: none; stroke-dashoffset: 0; stroke-dasharray: none; }
+  .flow { animation: none; opacity: 0.55; stroke-dasharray: none; }
+  .depth-layer { transform: none !important; }
   .press:active { transform: none; }
-  *, *::before, *::after { transition-duration: 1ms !important; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
 }

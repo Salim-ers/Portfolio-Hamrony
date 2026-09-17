@@ -1,11 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { profile, company } from "@/data/profile";
-import { socials } from "@/data/socials";
-import { OverlayProvider } from "@/components/overlays/OverlayProvider";
-import { Nav } from "@/components/layout/Nav";
-import { Footer } from "@/components/layout/Footer";
+import { profile, company, contact, seo } from "@/data/profile";
+import { UniverseNav } from "@/components/layout/UniverseNav";
 import { realValue, siteUrl } from "@/lib/utils";
 
 const grotesk = localFont({
@@ -32,9 +29,9 @@ const cormorant = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
-  title: { default: profile.seo.title, template: `%s | ${profile.name}` },
-  description: profile.seo.description,
-  keywords: [...profile.seo.keywords],
+  title: { default: seo.title, template: `%s | ${profile.name}` },
+  description: seo.description,
+  keywords: [...seo.keywords],
   authors: [{ name: profile.name }],
   creator: profile.name,
   alternates: { canonical: "/" },
@@ -42,22 +39,24 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_FR",
     url: "/",
-    siteName: `${profile.name}, ${company.name}`,
-    title: profile.seo.title,
-    description: profile.seo.description,
+    siteName: profile.name,
+    title: seo.title,
+    description: seo.description,
   },
-  twitter: { card: "summary_large_image", title: profile.seo.title, description: profile.seo.description },
+  twitter: { card: "summary_large_image", title: seo.title, description: seo.description },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f7f7f4",
-  colorScheme: "light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f2ea" },
+    { media: "(prefers-color-scheme: dark)", color: "#121419" },
+  ],
 };
 
 function StructuredData() {
   const url = siteUrl();
-  const sameAs = [realValue(socials.linkedin), realValue(socials.github)].filter(Boolean);
+  const sameAs = [realValue(contact.linkedin), realValue(contact.github)].filter(Boolean);
   const data = {
     "@context": "https://schema.org",
     "@graph": [
@@ -66,10 +65,18 @@ function StructuredData() {
         "@id": `${url}/#person`,
         name: profile.name,
         url,
-        jobTitle: "Administrateur systèmes et réseaux",
-        email: `mailto:${socials.email}`,
+        jobTitle: "Administrateur systèmes, réseaux et sécurité",
+        email: `mailto:${contact.jobEmail}`,
+        knowsAbout: [
+          "Administration systèmes",
+          "Administration réseaux",
+          "Active Directory",
+          "Windows Server",
+          "Support informatique N1 N2",
+          "Développement web",
+          "SaaS",
+        ],
         worksFor: { "@id": `${url}/#organization` },
-        knowsAbout: ["Administration systèmes", "Administration réseaux", "Active Directory", "Infrastructure réseau", "SaaS", "Développement web"],
         ...(sameAs.length ? { sameAs } : {}),
       },
       {
@@ -77,7 +84,7 @@ function StructuredData() {
         "@id": `${url}/#organization`,
         name: company.name,
         description: company.activity,
-        email: socials.email,
+        email: contact.projectEmail,
         telephone: "+33651080833",
         founder: { "@id": `${url}/#person` },
         identifier: { "@type": "PropertyValue", propertyID: "SIREN", value: company.siren.replace(/\s/g, "") },
@@ -88,7 +95,6 @@ function StructuredData() {
           addressLocality: company.address.city,
           addressCountry: company.address.country,
         },
-        ...(realValue(socials.harmonyUrl) ? { url: socials.harmonyUrl } : {}),
       },
     ],
   };
@@ -98,13 +104,24 @@ function StructuredData() {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={`${grotesk.variable} ${plexMono.variable} ${cormorant.variable}`}>
+      <head>
+        {/*
+          Active les états d'animation avant le premier rendu, et seulement
+          si le JavaScript s'exécute et que l'utilisateur n'a pas demandé
+          moins d'animations. Sans cet attribut, aucun contenu n'est masqué :
+          une erreur de script ne peut donc pas rendre une section invisible.
+          Inline et synchrone : pas de clignotement au chargement.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.dataset.motion="on"}}catch(e){}`,
+          }}
+        />
+      </head>
       <body>
         <StructuredData />
-        <OverlayProvider>
-          <Nav />
-          <main id="main">{children}</main>
-          <Footer />
-        </OverlayProvider>
+        <UniverseNav />
+        <main id="main">{children}</main>
       </body>
     </html>
   );

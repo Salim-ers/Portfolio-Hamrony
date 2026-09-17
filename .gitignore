@@ -9,3 +9,5 @@ next-env.d.ts
 
 # Captures de vérification locales
 .shots
+.verify/
+.review/

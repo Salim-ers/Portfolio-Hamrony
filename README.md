@@ -1,70 +1,123 @@
-# Salim El Rhalmani, portfolio
+# Portfolio — Salim El Rhalmani
 
-Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4. Aucune base de données, aucune clé d'API : tout le contenu vit dans `/data`.
+Deux pratiques, une même signature.
+Un portfolio à deux univers autonomes, reliés par une identité typographique commune.
+
+| Univers | URL | Ambiance | Public visé |
+| --- | --- | --- | --- |
+| Porte d'entrée | `/` | Ivoire, deux panneaux | Tout le monde |
+| Web & applications | `/creation` | Ivoire, encre, accent vermillon | Clients, prospects |
+| Étude de cas | `/creation/<slug>` | idem | Clients, prospects |
+| Systèmes & réseaux | `/systemes` | Graphite, accent bleu électrique | Recruteurs |
+
+La porte d'entrée n'est jamais imposée : les deux univers ont une URL directe,
+la navigation persistante permet de basculer à tout moment, et le bouton retour
+du navigateur fonctionne normalement.
+
+## Stack
+
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4.
+**Aucune librairie d'animation** : tout le mouvement est en CSS, piloté par
+`IntersectionObserver` et quelques classes utilitaires.
 
 ## Démarrer
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
-npm run build      # vérification avant mise en ligne
+npm run dev
 ```
 
-## Mettre en ligne sur Vercel
+## Scripts
 
-1. Pousser le dossier sur un dépôt GitHub.
-2. Sur vercel.com : **Add New > Project**, importer le dépôt. Vercel détecte Next.js, aucun réglage à changer.
-3. Variable d'environnement (Settings > Environment Variables) : `NEXT_PUBLIC_SITE_URL=https://votre-domaine.fr`. Elle sert au sitemap, aux balises Open Graph et au JSON-LD.
-4. Brancher le domaine dans Settings > Domains.
+| Commande | Rôle |
+| --- | --- |
+| `npm run dev` | Développement |
+| `npm run build` / `npm start` | Production |
+| `npm run lint` | Vérification TypeScript |
+| `npm run captures` | Recapture les sites en ligne (voir plus bas) |
+| `npm run verify` | Contrôle le site construit dans un vrai navigateur |
 
-## Où modifier le contenu
+## Règle de véracité
+
+Le site ne présente que des informations vérifiables.
+
+- **Aucune interface n'est dessinée.** Toutes les captures sont de vraies
+  captures des sites en ligne, produites par `npm run captures`. Si un fichier
+  n'existe pas, `lib/shots.ts` renvoie `null` et la mise en page bascule sur une
+  composition éditoriale — jamais sur une fausse capture.
+- **Aucun projet n'est déclaré « client » ou « terminé »** sans preuve. Le champ
+  `status` ne décrit que le fait vérifiable : le site répond à une URL publique.
+- **Aucun résultat chiffré** n'est affiché. `case.results` reste vide tant que
+  rien n'est documenté, et la section n'est alors pas rendue.
+- **Le schéma du home lab est un schéma de principe**, annoncé comme tel. Aucun
+  plan d'adressage, aucun inventaire matériel, aucune mesure de disponibilité.
+  Les flux animés illustrent un sens de circulation, pas une supervision.
+- **Tout exemple pédagogique est badgé comme tel** sur la page (voir
+  `support.example` dans `data/it.ts`).
+- **Les valeurs entre crochets** (`[LINKEDIN_URL]`, `[CV_PDF]`) sont des
+  emplacements vides : le lien correspondant n'est pas affiché tant qu'elles ne
+  sont pas renseignées (`realValue` dans `lib/utils.ts`).
+
+## Contenu
 
 | Fichier | Contenu |
 | --- | --- |
-| `data/profile.ts` | Identité, titre, présentation, entreprise (SIREN, adresse) |
-| `data/socials.ts` | Email, téléphone, LinkedIn, GitHub, CV |
-| `data/projects.ts` | Produits : statut, stack, fonctionnalités, URL, captures |
-| `data/clientProjects.ts` | Sites réalisés pour des clients |
-| `data/infrastructure.ts`, `data/homelab.ts` | Études de cas et Home Lab |
-| `data/skills.ts`, `data/experience.ts`, `data/education.ts`, `data/building.ts` | Stack, parcours, formation, projets en cours |
+| `data/works.ts` | Réalisations web, études de cas, date du dernier relevé |
+| `data/it.ts` | Positionnement, formation, compétences, home lab, M365, support, parcours |
+| `data/profile.ts` | Identité, société, points de contact, SEO |
 
-### Règle des placeholders
+Le contact est **séparé par univers** : `contact.projectEmail` côté création,
+`contact.jobEmail` côté systèmes. Les deux ne sont jamais mélangés dans un texte.
 
-Toute valeur de la forme `[NOM_EN_MAJUSCULES]` est considérée comme manquante : le lien ou le bloc correspondant est masqué en production. Il suffit de remplacer la valeur pour qu'il apparaisse.
-
-Restent à renseigner : `[LINKEDIN]`, `[GITHUB]`, `[CV]`, `[HARMONY_URL]`, `[AEQUITAS_URL]`, `[LUMELY_URL]`, `[STUDIO_ONE_URL]`, `[TILAWA_URL]`, `[SKILLORA_URL]`, `[EQUARIS_URL]`, `[MERVEILLE_URL]`, `[DUO_URL]`, `[PROFILE_PHOTO]`, `[FEDEX_ROLE]`, ainsi que les valeurs du Home Lab (`documented: false` tant qu'il n'est pas documenté).
-
-Déjà renseignés : Centrium (centrium-platform.com), Odyssea, Noa Café, Poulet Station, Royale Auto-école.
-
-### Statuts
-
-`status` accepte `"Live" | "Demo" | "Prototype" | "In Development" | "Concept"`. Tant qu'il vaut `null`, le site affiche « Statut à préciser ». Chaque fonctionnalité a un état `working`, `in-progress`, `planned` ou `scope` : ne marquer `working` que ce qui fonctionne réellement.
-
-## Captures d'écran
-
-Un site en ligne avec `livePreview: true` s'affiche en aperçu réel (iframe) tant qu'aucune capture n'existe. Dès qu'une image est déposée, elle remplace l'aperçu automatiquement au build suivant, sans toucher au code :
-
-| Emplacement | Utilisation |
-| --- | --- |
-| `public/projects/<slug>/home.jpg` | Visuel principal d'un produit |
-| `public/projects/<slug>/detail-1.jpg`, `detail-2.jpg` | Vues secondaires (affichées seulement si présentes) |
-| `public/projects/<slug>/mobile.jpg` | Vue mobile |
-| `public/clients/<slug>/home.jpg` | Site client |
-
-Formats acceptés : `.jpg`, `.png`, `.webp`, `.avif`.
-
-### Générer les captures automatiquement
+## Captures
 
 ```bash
-npm i -D playwright
 npx playwright install chromium
-npm run captures                  # tous les sites en ligne déclarés dans /data
-npm run captures -- centrium      # un seul
+npm run captures              # tous les sites
+npm run captures -- odyssea   # un seul
 ```
 
-Recommandé pour les sites qui interdisent l'intégration en iframe (en-tête `X-Frame-Options` ou `frame-ancestors`) : l'aperçu y resterait vide, la capture règle le problème. Pour Centrium, c'est à vérifier en ouvrant le portfolio une fois déployé.
+Les cibles sont déclarées dans `scripts/shots.config.mjs`. Le script produit
+`/public/shots/<slug>/{home,full,mobile,<route>}.jpg` et **refuse** une capture
+dont l'URL finale diffère de l'URL demandée : une page protégée qui redirige
+vers `/login` ne peut donc pas être légendée comme une page produit.
 
-## Raccourcis
+Après une nouvelle campagne, mettre à jour `capturedOn` dans `data/works.ts`.
 
-- `Ctrl K` / `⌘ K` : palette de commandes
-- `~/terminal` en pied de page : terminal (`help`, `whoami`, `projects`, `skills`, `homelab`, `contact`, `clear`)
+## Vérification
+
+```bash
+npm run build && npm start
+npm run verify                # dans un autre terminal
+```
+
+Contrôle sur desktop / tablette / mobile : débordement horizontal, images sans
+`alt` ou sans dimensions, révélations non déclenchées, liens internes cassés,
+redirections des anciennes URLs, focus clavier visible, rendu avec
+`prefers-reduced-motion`. Les captures de contrôle vont dans `./.verify`.
+
+## Mouvement
+
+Les états « masqués » des animations sont portés par `[data-motion="on"]`,
+attribut posé sur `<html>` par un script inline **uniquement** si le JavaScript
+s'exécute et que `prefers-reduced-motion` n'est pas activé. Conséquence : sans
+JavaScript, ou avec les animations réduites, rien n'est masqué — tout le contenu
+s'affiche directement dans son état final.
+
+Quatre familles de révélation se relaient pour ne jamais rejouer le même effet
+deux sections de suite : `mask` (captures), `rule` (filets), `slide` (colonnes
+éditoriales), `rise` (listes et détails techniques).
+
+## Thème
+
+Les deux ambiances sont pilotées par l'attribut `data-universe` sur un
+conteneur. Les composants ne codent jamais une couleur en dur : ils lisent
+`--paper`, `--ink`, `--accent`. Chaque bloc d'univers réexpose les alias
+Tailwind (`--color-paper`, …) localement — une variable CSS étant résolue là où
+elle est déclarée, les déclarer uniquement sur `:root` figerait le thème.
+
+## Anciennes URLs
+
+`/projets`, `/projects` et leurs pages de détail sont redirigées en permanence
+vers `/creation` (voir `next.config.ts`). `equaris` redirige vers
+`horse-ledger` ; les projets retirés de la sélection renvoient à la galerie.
