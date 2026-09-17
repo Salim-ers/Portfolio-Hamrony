@@ -13,18 +13,20 @@ import { LabSchematic } from "@/components/gateway/LabSchematic";
 /**
  * PORTE D'ENTRÉE
  * ==================================================================
- * Deux phrases pour dire qui je suis, puis deux portes que le travail
- * remplit lui-même. L'essentiel de la surface est occupé par de vraies
- * captures, pas par du texte : on doit avoir envie d'ouvrir.
+ * Règle de composition : sur ordinateur, tout ce qui permet de choisir —
+ * les deux titres, les deux descriptions, les deux appels à l'action —
+ * tient dans le premier écran, quelle que soit la hauteur de la fenêtre.
+ * Le texte est donc placé EN HAUT de chaque panneau, et ce sont les
+ * images qui occupent la hauteur restante et se coupent en bas.
  *
- * Sur ordinateur, le panneau visé — au survol comme au clavier — prend un
- * peu plus de place et ses écrans se redressent. L'expansion est en CSS
- * pur : elle fonctionne avant même que le JavaScript ait pris la main.
+ * L'ensemble fait exactement 100dvh sur grand écran : la page ne défile
+ * pas, il n'y a rien d'autre à y lire. Sur mobile, les deux panneaux
+ * s'empilent dans le flux normal.
  *
- * Au clic, le panneau choisi s'ouvre sur toute la largeur puis la page de
- * l'univers prend le relais (380 ms, sauté si les animations sont
- * réduites). Ce n'est jamais un passage obligé : /creation et /systemes
- * ont une URL directe et la navigation permet de basculer partout.
+ * Le panneau visé — au survol comme au clavier — prend un peu plus de
+ * place. Au clic il s'ouvre en grand puis la page de l'univers prend le
+ * relais (380 ms, sauté si les animations sont réduites). Ce n'est jamais
+ * un passage obligé : /creation et /systemes ont une URL directe.
  */
 
 const TRANSITION_MS = 380;
@@ -64,29 +66,30 @@ export function Gateway({ shots, workCount }: { shots: GatewayShots; workCount: 
   );
 
   return (
-    <div className="flex min-h-[100dvh] flex-col pt-16">
-      {/* ---------- Qui je suis, en deux phrases ---------- */}
-      <div className="border-b border-line bg-paper px-5 py-6 sm:px-8 md:py-7 lg:px-12">
-        <div className="mx-auto flex w-full max-w-[1320px] flex-col gap-3 md:flex-row md:items-baseline md:justify-between md:gap-10">
-          <h1 className="max-w-[30ch] text-h1 text-ink">
-            <span className="word-mask" style={{ ["--delay" as string]: "80ms" }}>
-              <span>Je crée des sites et des applications.</span>
-            </span>{" "}
-            <span className="word-mask text-ink-3" style={{ ["--delay" as string]: "200ms" }}>
-              <span>J&apos;administre des infrastructures.</span>
-            </span>
-          </h1>
-          <p
-            className="lift-in shrink-0 font-mono text-tech uppercase tracking-[0.18em] text-ink-3"
-            style={{ ["--delay" as string]: "380ms" }}
-          >
-            {profile.name} — {company.name}
-          </p>
-        </div>
+    <div className="flex flex-col pt-16 lg:h-[100dvh]">
+      {/* ---------- Qui je suis ----------
+          Aligné sur la même gouttière que les panneaux : sans cela le texte
+          flotterait au centre pendant que les panneaux vont bord à bord, et
+          la page paraîtrait décousue sur grand écran. */}
+      <div className="shrink-0 border-b border-line bg-paper px-5 py-6 sm:px-8 lg:px-10 lg:py-7">
+        <p
+          className="lift-in font-mono text-tech uppercase tracking-[0.18em] text-ink-3"
+          style={{ ["--delay" as string]: "40ms" }}
+        >
+          {profile.name} — {company.name}
+        </p>
+        <h1 className="mt-3 max-w-[34ch] text-h1 text-ink">
+          <span className="word-mask" style={{ ["--delay" as string]: "120ms" }}>
+            <span>Je crée des sites et des applications.</span>
+          </span>{" "}
+          <span className="word-mask text-ink-3" style={{ ["--delay" as string]: "240ms" }}>
+            <span>J&apos;administre des infrastructures.</span>
+          </span>
+        </h1>
       </div>
 
       {/* ---------- Les deux portes ---------- */}
-      <div className={cn("flex flex-1 flex-col lg:flex-row", leaving && "pointer-events-none")}>
+      <div className={cn("flex min-h-0 flex-1 flex-col lg:flex-row", leaving && "pointer-events-none")}>
         <Panel
           id="creation"
           index="01"
@@ -95,7 +98,7 @@ export function Gateway({ shots, workCount }: { shots: GatewayShots; workCount: 
           title={profile.universes.creation.title}
           line="Sites vitrines, applications et produits SaaS."
           cta={profile.universes.creation.cta}
-          footnote={`${workCount} projets en ligne · ${company.name}`}
+          footnote={`${workCount} projets en ligne`}
           leaving={leaving}
           onNavigate={go}
         >
@@ -110,7 +113,7 @@ export function Gateway({ shots, workCount }: { shots: GatewayShots; workCount: 
           title={profile.universes.systems.title}
           line="Infrastructure, sécurité et support utilisateurs."
           cta={profile.universes.systems.cta}
-          footnote="Windows Server · Active Directory · VLAN · pfSense"
+          footnote="Administrateur systèmes, réseaux et sécurité"
           leaving={leaving}
           onNavigate={go}
         >
@@ -156,19 +159,16 @@ function Panel({
       data-universe={universe}
       aria-labelledby={`panel-${id}`}
       className={cn(
-        "group/panel relative isolate flex min-h-[72svh] flex-col overflow-hidden bg-paper lg:min-h-[calc(100dvh-10rem)]",
+        "group/panel relative isolate flex min-h-0 flex-col overflow-hidden bg-paper",
         "border-b border-line last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0",
         "transition-[flex-grow,opacity] duration-[520ms] [transition-timing-function:var(--ease-in-out)]",
-        "lg:flex-1 lg:basis-0 lg:hover:flex-[1.28] lg:focus-within:flex-[1.28]",
+        "lg:flex-1 lg:basis-0 lg:hover:flex-[1.22] lg:focus-within:flex-[1.22]",
         isLeaving && "lg:flex-[14]",
         isDismissed && "opacity-0 lg:flex-[0.001]"
       )}
     >
-      {/* Zone visuelle : elle occupe la majeure partie du panneau. */}
-      <div className="relative min-h-0 flex-1 overflow-hidden px-5 pt-8 sm:px-8 lg:px-10 lg:pt-10">{children}</div>
-
-      {/* Bloc de texte, court et toujours au même endroit dans les deux panneaux. */}
-      <div className="relative z-10 border-t border-line bg-paper px-5 py-6 sm:px-8 lg:px-10 lg:py-7">
+      {/* Bloc de choix : toujours visible, jamais repoussé par les images. */}
+      <div className="shrink-0 px-5 pt-7 sm:px-8 lg:px-10 lg:pt-8">
         <div className="flex items-baseline gap-3">
           <span className="font-mono text-tech text-accent-ink">{index}</span>
           <span aria-hidden className="h-px flex-1 bg-line" />
@@ -176,13 +176,17 @@ function Panel({
         </div>
 
         <h2 id={`panel-${id}`} className="mt-4 text-h1 text-ink">
-          <Link href={href} onClick={(e) => onNavigate(e, id, href)} className="after:absolute after:inset-0 after:content-['']">
+          <Link
+            href={href}
+            onClick={(e) => onNavigate(e, id, href)}
+            className="after:absolute after:inset-0 after:content-['']"
+          >
             {title}
             <span className="sr-only"> — {cta}</span>
           </Link>
         </h2>
 
-        <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+        <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1.5">
           <p className="text-body-lg text-ink-2">{line}</p>
           <span className="inline-flex items-center gap-2 text-label font-medium text-accent-ink">
             {cta}
@@ -194,6 +198,14 @@ function Panel({
           </span>
         </div>
       </div>
+
+      {/* Zone visuelle. Sur grand écran elle prend la hauteur restante et se
+          coupe en bas : c'est elle qui absorbe les variations de hauteur de
+          fenêtre. Sur mobile, au contraire, elle suit son contenu — couper
+          n'y aurait aucun intérêt, et on veut voir tous les écrans. */}
+      <div className="relative mt-6 px-5 pb-8 sm:px-8 lg:mt-7 lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:px-10 lg:pb-0">
+        {children}
+      </div>
     </section>
   );
 }
@@ -201,9 +213,9 @@ function Panel({
 /* ------------------------------------------------------------------ */
 
 /**
- * Côté création : trois écrans réels, décalés en escalier. Ils se
- * redressent quand le panneau est visé. Aucune interface n'est dessinée —
- * si une capture manque, sa tuile disparaît simplement.
+ * Côté création : trois écrans réels, ancrés en haut. Ils débordent vers le
+ * bas du panneau, où ils sont coupés : la composition reste juste quelle
+ * que soit la hauteur disponible.
  */
 function WorkDeck({ shots }: { shots: GatewayShots }) {
   const { primary, secondary, mobile } = shots;
@@ -212,7 +224,8 @@ function WorkDeck({ shots }: { shots: GatewayShots }) {
     <div
       aria-hidden
       className={cn(
-        "flex h-full min-h-[260px] flex-col gap-3",
+        // Dans le flux sur mobile, ancré en haut du panneau sur grand écran.
+        "flex flex-col gap-3 lg:absolute lg:inset-x-10 lg:top-0",
         "transition-transform duration-[600ms] [transition-timing-function:var(--ease-out)]",
         "lg:translate-y-3 lg:group-hover/panel:translate-y-0 lg:group-focus-within/panel:translate-y-0"
       )}
@@ -224,7 +237,7 @@ function WorkDeck({ shots }: { shots: GatewayShots }) {
           address="centrium-platform.com"
           crop="top"
           priority
-          sizes="(max-width: 1024px) 92vw, 42vw"
+          sizes="(max-width: 1024px) 92vw, 46vw"
           className="[&_img]:aspect-[16/9]"
         />
       )}
@@ -236,7 +249,7 @@ function WorkDeck({ shots }: { shots: GatewayShots }) {
             frame="browser"
             address="horse-ledger.com"
             crop="top"
-            sizes="(max-width: 1024px) 68vw, 30vw"
+            sizes="(max-width: 1024px) 68vw, 34vw"
             className="[&_img]:aspect-[16/10]"
           />
         )}
@@ -245,8 +258,8 @@ function WorkDeck({ shots }: { shots: GatewayShots }) {
             shot={mobile}
             frame="device"
             crop="top"
-            sizes="120px"
-            className="w-[86px] sm:w-[104px] [&_img]:aspect-[9/16]"
+            sizes="130px"
+            className="w-[88px] sm:w-[112px] [&_img]:aspect-[9/16]"
           />
         )}
       </div>
@@ -255,18 +268,22 @@ function WorkDeck({ shots }: { shots: GatewayShots }) {
 }
 
 /**
- * Côté systèmes : le schéma de principe du laboratoire, plus trois faits
- * vérifiables. Pas de fausse console, pas de mesure inventée.
+ * Côté systèmes : le schéma de principe du laboratoire, qui occupe la
+ * hauteur disponible, puis trois faits vérifiables. Pas de fausse console,
+ * pas de mesure inventée.
  */
 function SystemsPreview() {
   return (
-    <div className="flex h-full min-h-[260px] flex-col">
+    <div className="flex min-h-[300px] flex-col lg:h-full lg:min-h-0">
       <div className="min-h-0 flex-1">
         <LabSchematic />
       </div>
       {/* Sous 640px les trois colonnes seraient trop étroites et les libellés
-          se chevaucheraient : on repasse à une liste d'une colonne. */}
-      <ul aria-hidden className="mt-5 flex flex-col gap-2 border-t border-line pt-4 sm:grid sm:grid-cols-3 sm:gap-3">
+          se chevaucheraient : on repasse à une seule colonne. */}
+      <ul
+        aria-hidden
+        className="mt-4 flex shrink-0 flex-col gap-2 border-t border-line pb-6 pt-4 sm:grid sm:grid-cols-3 sm:gap-3 lg:pb-8"
+      >
         {[
           ["13", "projets professionnalisants"],
           ["RNCP 6", "administrateur systèmes & réseaux"],

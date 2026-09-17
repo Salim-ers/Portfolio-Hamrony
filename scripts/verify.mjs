@@ -9,6 +9,8 @@
  *   - images sans alt et images sans dimensions (stabilité de la mise en page)
  *   - liens internes cassés
  *   - présence d'un état de focus visible
+ *   - sur la porte d'entrée, les deux appels à l'action tiennent dans le
+ *     premier écran, y compris sur un écran large et peu haut
  *   - rendu avec prefers-reduced-motion
  * Produit les captures dans ./.verify
  */
@@ -187,7 +189,46 @@ for (const vp of VIEWPORTS) {
   await ctx.close();
 }
 
-/* ---------- 5. Animations réduites ---------- */
+/* ---------- 5. Le choix tient dans le premier écran ----------
+   Sur la porte d'entrée, les deux titres et les deux appels à l'action
+   doivent être visibles sans défiler, y compris sur un écran large et
+   peu haut. C'est exactement ce qui avait cassé une fois. */
+{
+  const tailles = [
+    [2048, 1000],
+    [1920, 900],
+    [1680, 780],
+    [1440, 900],
+    [1280, 720],
+  ];
+  for (const [width, height] of tailles) {
+    const ctx = await browser.newContext({ viewport: { width, height }, locale: "fr-FR" });
+    const page = await ctx.newPage();
+    await page.goto(base + "/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(1200);
+    const audit = await page.evaluate(() => {
+      const out = { fenetre: window.innerHeight, panneaux: {} };
+      for (const sel of ["#panel-creation", "#panel-systems"]) {
+        const titre = document.querySelector(sel);
+        if (!titre) continue;
+        const section = titre.closest("section");
+        const cta = [...section.querySelectorAll("span")].find((s) => /Explorer/.test(s.textContent || ""));
+        out.panneaux[sel] = Math.round((cta ?? titre).getBoundingClientRect().bottom);
+      }
+      return out;
+    });
+    for (const [sel, bas] of Object.entries(audit.panneaux)) {
+      if (bas > audit.fenetre)
+        note(`${width}x${height} porte d'entrée : l'appel à l'action de ${sel} est sous le pli (${bas} > ${audit.fenetre})`);
+    }
+    if (Object.keys(audit.panneaux).length !== 2)
+      note(`${width}x${height} porte d'entrée : ${Object.keys(audit.panneaux).length} panneau(x) trouvé(s) au lieu de 2`);
+    await ctx.close();
+  }
+  console.log(`porte d'entrée : ${tailles.length} formats d'écran vérifiés`);
+}
+
+/* ---------- 6. Animations réduites ---------- */
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce", locale: "fr-FR" });
   const page = await ctx.newPage();

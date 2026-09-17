@@ -115,7 +115,22 @@ npm run verify                # dans un autre terminal
 Contrôle sur desktop / tablette / mobile : débordement horizontal, images sans
 `alt` ou sans dimensions, révélations non déclenchées, liens internes cassés,
 redirections des anciennes URLs, focus clavier visible, rendu avec
-`prefers-reduced-motion`. Les captures de contrôle vont dans `./.verify`.
+`prefers-reduced-motion`, et — sur cinq formats d'écran — le fait que les deux
+appels à l'action de la porte d'entrée tiennent dans le premier écran. Les
+captures de contrôle vont dans `./.verify`.
+
+## Porte d'entrée
+
+Sur ordinateur, la page fait exactement `100dvh` et ne défile pas. Le texte de
+chaque panneau est placé **en haut**, les images occupent la hauteur restante et
+se coupent en bas : quelle que soit la hauteur de la fenêtre, les deux titres et
+les deux appels à l'action restent visibles. Sur mobile, les panneaux s'empilent
+dans le flux et les images s'affichent en entier, sans recadrage.
+
+Le schéma du laboratoire existe en deux orientations — horizontale sur grand
+écran, verticale sur mobile — parce qu'un SVG conserve son rapport de forme : la
+seule version verticale se réduirait à un timbre-poste dans un panneau large et
+peu haut.
 
 ## Mouvement
 
