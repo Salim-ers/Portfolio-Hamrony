@@ -25,6 +25,22 @@ export const capturedOn = "18 septembre 2026";
 
 export type WorkStatus = "En ligne" | "Accès privé";
 
+/**
+ * Nature de l'engagement, confirmée par Salim le 18 septembre 2026.
+ *   client  — site commandé et livré à un établissement
+ *   demo    — projet de démonstration, aucune commande derrière
+ *   propre  — produit ou vitrine que je conçois pour mon compte
+ * Rien n'est déduit : un site n'est jamais présenté comme une commande
+ * client sans confirmation explicite.
+ */
+export type Engagement = "client" | "demo" | "propre";
+
+export const engagementLabel: Record<Engagement, string> = {
+  client: "Réalisation client",
+  demo: "Projet de démonstration",
+  propre: "Projet entrepreneurial",
+};
+
 export type WorkLayout = "opening" | "wide" | "duo" | "column" | "compact";
 
 export type CaseFeature = { label: string; detail: string };
@@ -37,6 +53,7 @@ export type Work = {
   sector: string;
   location: string | null;
   status: WorkStatus;
+  engagement: Engagement;
   /** Une phrase, à la première personne ou descriptive, jamais commerciale */
   lead: string;
   url: string | null;
@@ -76,6 +93,7 @@ export const works: Work[] = [
     sector: "Sociétés de conseil et ESN",
     location: null,
     status: "En ligne",
+    engagement: "propre",
     lead: "Piloter une ESN depuis un seul endroit : consultants, missions, comptes rendus d'activité et facturation dans un même flux.",
     url: "https://www.centrium-platform.com/",
     repo: null,
@@ -140,6 +158,7 @@ export const works: Work[] = [
     sector: "Filière équine",
     location: null,
     status: "En ligne",
+    engagement: "propre",
     lead: "La gestion quotidienne d'une écurie ou d'un haras : chevaux, soins, planning, documents et facturation au même endroit.",
     url: "https://www.horse-ledger.com/",
     repo: null,
@@ -201,6 +220,7 @@ export const works: Work[] = [
     sector: "Facturation électronique française",
     location: null,
     status: "En ligne",
+    engagement: "propre",
     lead: "Absorber la réforme française de la facturation électronique sans changer les habitudes de facturation d'une entreprise.",
     url: "https://aequitas-hazel.vercel.app/",
     repo: "https://github.com/Salim-ers/Aequitas",
@@ -259,6 +279,7 @@ export const works: Work[] = [
     sector: "Voyage",
     location: null,
     status: "En ligne",
+    engagement: "propre",
     lead: "Indiquer où, quand et avec qui — et obtenir un voyage composé heure par heure, escales comprises.",
     url: "https://odyssea-ten.vercel.app/",
     repo: "https://github.com/Salim-ers/Odyssea",
@@ -316,6 +337,7 @@ export const works: Work[] = [
     sector: "Services informatiques",
     location: null,
     status: "En ligne",
+    engagement: "propre",
     lead: "La vitrine de services IT : support, administration systèmes et réseaux, infrastructure, cloud et qualité logicielle.",
     url: "https://www.quad-core.fr/",
     repo: null,
@@ -369,6 +391,7 @@ export const works: Work[] = [
     sector: "Auto-école",
     location: "Breuil-le-Vert (60)",
     status: "En ligne",
+    engagement: "client",
     lead: "Sept pages pour répondre aux vraies questions d'un futur élève : quelle formation, quels documents, quel budget, comment s'inscrire.",
     url: "https://royale-one.vercel.app/",
     repo: "https://github.com/Salim-ers/Royale-Auto-cole",
@@ -425,6 +448,7 @@ export const works: Work[] = [
     sector: "Café de spécialité",
     location: "Paris 19e",
     status: "En ligne",
+    engagement: "client",
     lead: "Un site court pour un lieu petit : la carte, l'adresse, les horaires, et l'envie d'y aller.",
     url: "https://noa-cafe-one.vercel.app/",
     repo: "https://github.com/Salim-ers/noa-caf-",
@@ -480,6 +504,7 @@ export const works: Work[] = [
     sector: "Association cultuelle",
     location: "Creil (60)",
     status: "En ligne",
+    engagement: "demo",
     lead: "Un site de service public associatif : horaires de prière, école, annonces, visite du lieu et dons.",
     url: "https://accmo-gamma.vercel.app/",
     repo: "https://github.com/Salim-ers/ACCMO",
@@ -525,6 +550,8 @@ export const works: Work[] = [
         { name: "home", alt: "Page d'accueil du site de la Grande Mosquée de Creil" },
         { name: "full", alt: "Page d'accueil complète du site de la Grande Mosquée de Creil" },
       ],
+      disclosure:
+        "Projet de démonstration : je l'ai conçu de ma propre initiative, à partir d'informations publiques. Il n'a pas été commandé par l'association et n'engage en rien celle-ci.",
     },
   },
 
@@ -535,6 +562,7 @@ export const works: Work[] = [
     sector: "Restauration rapide",
     location: "Creil (60)",
     status: "En ligne",
+    engagement: "client",
     lead: "Une vitrine courte pour une enseigne de restauration rapide : l'offre, l'adresse, le positionnement 100 % halal.",
     url: "https://ps-nine-theta.vercel.app/",
     repo: "https://github.com/Salim-ers/ps",

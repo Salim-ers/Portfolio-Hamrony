@@ -45,8 +45,12 @@ Le site ne présente que des informations vérifiables.
   captures des sites en ligne, produites par `npm run captures`. Si un fichier
   n'existe pas, `lib/shots.ts` renvoie `null` et la mise en page bascule sur une
   composition éditoriale — jamais sur une fausse capture.
-- **Aucun projet n'est déclaré « client » ou « terminé »** sans preuve. Le champ
-  `status` ne décrit que le fait vérifiable : le site répond à une URL publique.
+- **Aucun projet n'est déclaré « client » sans confirmation explicite.** Le champ
+  `status` ne décrit que le fait vérifiable (le site répond à une URL publique) ;
+  `engagement` distingue une commande client, un projet de démonstration et un
+  projet entrepreneurial, et s'affiche sur la vignette comme sur l'étude de cas.
+  Un projet de démonstration portant le nom d'une structure réelle précise, en
+  clair, qu'il n'a pas été commandé par elle.
 - **Aucun résultat chiffré** n'est affiché. `case.results` reste vide tant que
   rien n'est documenté, et la section n'est alors pas rendue.
 - **Le schéma du home lab est un schéma de principe**, annoncé comme tel. Aucun
@@ -54,9 +58,11 @@ Le site ne présente que des informations vérifiables.
   Les flux animés illustrent un sens de circulation, pas une supervision.
 - **Tout exemple pédagogique est badgé comme tel** sur la page (voir
   `support.example` dans `data/it.ts`).
-- **Les valeurs entre crochets** (`[LINKEDIN_URL]`, `[CV_PDF]`) sont des
-  emplacements vides : le lien correspondant n'est pas affiché tant qu'elles ne
-  sont pas renseignées (`realValue` dans `lib/utils.ts`).
+- **Une valeur entre crochets** est un emplacement vide : le lien correspondant
+  n'est pas affiché tant qu'elle n'est pas renseignée (`realValue` dans
+  `lib/utils.ts`).
+- **La disponibilité** (`positioning.availability`) s'affiche seulement si elle
+  est renseignée. La remettre à `null` dès qu'elle n'est plus d'actualité.
 
 ## Contenu
 

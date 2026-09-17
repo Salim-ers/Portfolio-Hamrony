@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { works, getWork, capturedOn } from "@/data/works";
+import { works, getWork, capturedOn, engagementLabel } from "@/data/works";
 import { contact } from "@/data/profile";
 import { shot, shots } from "@/lib/shots";
 import { hostname } from "@/lib/utils";
@@ -65,7 +65,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               </>
             )}
             <span aria-hidden>·</span>
-            <span className="text-accent-ink">{work.status}</span>
+            <span>{work.status}</span>
+            <span aria-hidden>·</span>
+            <span className="text-accent-ink">{engagementLabel[work.engagement]}</span>
           </p>
 
           <h1 className="mt-5 text-mega text-ink">
@@ -114,7 +116,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           </div>
           <div className="md:col-span-4 md:col-start-9">
             <Reveal effect="rise" delay={120}>
-              <Field label="Public concerné" value={work.case.audience} />
+              <Field label="Nature du projet" value={engagementLabel[work.engagement]} />
+              <Field label="Public concerné" value={work.case.audience} className="mt-8" />
               <Field label="Mon rôle" value={work.case.role} className="mt-8" />
               {work.case.stack.length > 0 && (
                 <div className="mt-8">

@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import type { Work } from "@/data/works";
+import { engagementLabel, type Work } from "@/data/works";
 import { shot, firstShot } from "@/lib/shots";
 import { cn, hostname } from "@/lib/utils";
 import { Shot } from "@/components/ui/Shot";
@@ -226,6 +226,8 @@ function Meta({ work, n }: { work: Work; n: string }) {
       )}
       <span aria-hidden>·</span>
       <span className="text-ink-2">{work.status}</span>
+      <span aria-hidden>·</span>
+      <span className="text-accent-ink">{engagementLabel[work.engagement]}</span>
     </p>
   );
 }

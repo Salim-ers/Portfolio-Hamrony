@@ -43,9 +43,8 @@ export const company = {
 } as const;
 
 /**
- * Les valeurs entre crochets sont des emplacements à renseigner.
- * Tant qu'elles le restent, le lien correspondant n'est pas affiché
- * (voir `realValue` dans lib/utils).
+ * Une valeur entre crochets est un emplacement vide : le lien correspondant
+ * n'est alors pas affiché (voir `realValue` dans lib/utils).
  */
 export const contact = {
   /** Demandes de projet, côté création */
@@ -55,9 +54,8 @@ export const contact = {
   phoneDisplay: "06 51 08 08 33",
   phoneHref: "tel:+33651080833",
   github: "https://github.com/Salim-ers",
-  linkedin: "[LINKEDIN_URL]",
-  /** Déposer le PDF dans /public et renseigner le chemin, ex. "/cv-salim-el-rhalmani.pdf" */
-  cv: "[CV_PDF]",
+  linkedin: "https://www.linkedin.com/in/salim-ers",
+  cv: "/cv-salim-el-rhalmani.pdf",
 } as const;
 
 export const seo = {

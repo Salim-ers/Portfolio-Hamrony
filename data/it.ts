@@ -22,12 +22,12 @@ export const positioning = {
   languages: "Français (natif) · Anglais (professionnel)",
   mobility: "Permis B, véhiculé",
   /**
-   * Mention de disponibilité : laissée à null volontairement.
-   * Le CV portait « disponible immédiatement », information datée et non
-   * revérifiée. Renseigner cette valeur l'affiche sur la page ; tant
-   * qu'elle est nulle, aucune promesse de délai n'est faite.
+   * Disponibilité confirmée par Salim le 18 septembre 2026.
+   * Remettre à null dès qu'elle n'est plus d'actualité : le bloc
+   * correspondant disparaît alors de la page, plutôt que d'afficher une
+   * promesse de délai périmée.
    */
-  availability: null as string | null,
+  availability: "Disponible immédiatement" as string | null,
 };
 
 /* ------------------------------------------------------------------
