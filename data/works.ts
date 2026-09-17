@@ -58,12 +58,12 @@ export type Work = {
   lead: string;
   url: string | null;
   repo: string | null;
-  /** Famille : produit numérique ou site pour un établissement */
-  family: "produit" | "site";
   layout: WorkLayout;
-  featured: boolean;
-  /** Vue utilisée dans la galerie */
-  cover: { name: string; alt: string };
+  /**
+   * Libellés écrits pour certains écrans capturés, quand le nom déduit de
+   * l'URL ne suffit pas. Clé = nom du fichier sans extension.
+   */
+  screenLabels?: Record<string, string>;
   case: {
     context: string;
     audience: string;
@@ -78,8 +78,6 @@ export type Work = {
     stackNote?: string;
     /** Vide tant que rien n'est mesuré et documenté */
     results: string[];
-    /** Captures à afficher dans l'étude de cas */
-    gallery: { name: string; alt: string; caption?: string }[];
     /** Précision honnête affichée telle quelle sur la page */
     disclosure?: string;
   };
@@ -88,6 +86,11 @@ export type Work = {
 export const works: Work[] = [
   {
     slug: "centrium",
+    screenLabels: {
+      "p-plateforme": "présentation de la plateforme",
+      "p-engagements": "page engagements",
+      "p-essai": "parcours d'essai",
+    },
     name: "Centrium",
     kind: "Plateforme SaaS",
     sector: "Sociétés de conseil et ESN",
@@ -97,10 +100,7 @@ export const works: Work[] = [
     lead: "Piloter une ESN depuis un seul endroit : consultants, missions, comptes rendus d'activité et facturation dans un même flux.",
     url: "https://www.centrium-platform.com/",
     repo: null,
-    family: "produit",
     layout: "opening",
-    featured: true,
-    cover: { name: "home", alt: "Page d'accueil de Centrium, plateforme de pilotage pour ESN" },
     case: {
       context:
         "Dans une ESN, la même information circule dans cinq outils : le CV du consultant dans un dossier partagé, la mission dans un tableur, le compte rendu d'activité dans un mail, la facture dans un logiciel comptable. Chaque transfert est une occasion de perdre une donnée. Centrium rassemble cette chaîne dans un seul produit.",
@@ -141,11 +141,6 @@ export const works: Work[] = [
       ],
       stack: ["Next.js", "TypeScript", "Vercel", "Hébergement européen"],
       results: [],
-      gallery: [
-        { name: "home", alt: "Page d'accueil de Centrium", caption: "Entrée du produit : la promesse tient en une ligne et une démonstration." },
-        { name: "tarifs", alt: "Page tarifs de Centrium", caption: "Les paliers d'offre du produit." },
-        { name: "mobile", alt: "Centrium en version mobile", caption: "Version mobile." },
-      ],
       disclosure:
         "Le site présente le produit et sa démonstration. Je ne publie aucun chiffre d'usage ou de performance : je n'en ai pas de mesure documentée.",
     },
@@ -153,6 +148,12 @@ export const works: Work[] = [
 
   {
     slug: "horse-ledger",
+    screenLabels: {
+      "p-demande-demo": "formulaire de demande de démonstration",
+      "p-ecurie": "offre Écurie",
+      "p-haras": "offre Haras",
+      "p-a-propos": "page à propos",
+    },
     name: "Horse Ledger",
     kind: "Plateforme SaaS verticale",
     sector: "Filière équine",
@@ -162,10 +163,7 @@ export const works: Work[] = [
     lead: "La gestion quotidienne d'une écurie ou d'un haras : chevaux, soins, planning, documents et facturation au même endroit.",
     url: "https://www.horse-ledger.com/",
     repo: null,
-    family: "produit",
     layout: "wide",
-    featured: true,
-    cover: { name: "home", alt: "Page d'accueil de Horse Ledger, plateforme de gestion pour professionnels du cheval" },
     case: {
       context:
         "Une structure équine professionnelle suit des dizaines de chevaux : soins, vaccinations, interventions du vétérinaire et du maréchal, pension, propriétaires, stocks. L'information vit sur des carnets papier et des tableurs. Horse Ledger la met dans un produit unique, pensé pour le vocabulaire du métier.",
@@ -203,11 +201,6 @@ export const works: Work[] = [
       ],
       stack: ["Next.js", "TypeScript", "Vercel"],
       results: [],
-      gallery: [
-        { name: "home", alt: "Page d'accueil de Horse Ledger", caption: "Une entrée photographique, volontairement peu logicielle." },
-        { name: "full", alt: "Page d'accueil complète de Horse Ledger", caption: "Le déroulé de la page : promesse, modules, offres." },
-        { name: "mobile", alt: "Horse Ledger en version mobile" },
-      ],
       disclosure:
         "Les témoignages et les grilles tarifaires visibles sur le site sont le discours du produit. Je ne les présente pas ici comme des résultats mesurés.",
     },
@@ -215,6 +208,11 @@ export const works: Work[] = [
 
   {
     slug: "aequitas",
+    screenLabels: {
+      "p-demarche-pa": "page démarche produit",
+      "p-developers": "espace développeurs",
+      "p-facturation-electronique": "page facturation électronique",
+    },
     name: "Aequitas",
     kind: "Plateforme SaaS",
     sector: "Facturation électronique française",
@@ -224,10 +222,7 @@ export const works: Work[] = [
     lead: "Absorber la réforme française de la facturation électronique sans changer les habitudes de facturation d'une entreprise.",
     url: "https://aequitas-hazel.vercel.app/",
     repo: "https://github.com/Salim-ers/Aequitas",
-    family: "produit",
     layout: "duo",
-    featured: true,
-    cover: { name: "home", alt: "Page d'accueil d'Aequitas, plateforme de facturation électronique" },
     case: {
       context:
         "La facturation électronique devient obligatoire en France par paliers. Pour une TPE ou un cabinet, la difficulté n'est pas d'émettre une facture : c'est de respecter des règles précises — numérotation continue, mentions obligatoires, piste d'audit — sans devenir expert du sujet. Aequitas prend cette contrainte à sa charge.",
@@ -264,11 +259,6 @@ export const works: Work[] = [
       ],
       stack: ["Next.js", "TypeScript", "Vercel"],
       results: [],
-      gallery: [
-        { name: "home", alt: "Page d'accueil d'Aequitas", caption: "La réforme présentée comme une contrainte absorbée, pas comme un argument de peur." },
-        { name: "tarifs", alt: "Page tarifs d'Aequitas" },
-        { name: "mobile", alt: "Aequitas en version mobile" },
-      ],
     },
   },
 
@@ -283,10 +273,7 @@ export const works: Work[] = [
     lead: "Indiquer où, quand et avec qui — et obtenir un voyage composé heure par heure, escales comprises.",
     url: "https://odyssea-ten.vercel.app/",
     repo: "https://github.com/Salim-ers/Odyssea",
-    family: "produit",
     layout: "column",
-    featured: true,
-    cover: { name: "home", alt: "Page d'accueil d'Odyssea, composition de voyages sur mesure" },
     case: {
       context:
         "Préparer un voyage multi-escales demande des semaines : comparer des vols, répartir les nuits entre les villes, remplir les journées. Odyssea part des seules informations que le voyageur connaît vraiment — sa ville de départ, sa destination, ses dates, ses compagnons — et compose le reste.",
@@ -322,11 +309,6 @@ export const works: Work[] = [
       ],
       stack: ["JavaScript", "Next.js", "Vercel"],
       results: [],
-      gallery: [
-        { name: "home", alt: "Page d'accueil d'Odyssea", caption: "La composition commence dès la première section." },
-        { name: "full", alt: "Page d'accueil complète d'Odyssea", caption: "Exemple d'itinéraire détaillé présenté sur la page." },
-        { name: "mobile", alt: "Odyssea en version mobile" },
-      ],
     },
   },
 
@@ -341,10 +323,7 @@ export const works: Work[] = [
     lead: "La vitrine de services IT : support, administration systèmes et réseaux, infrastructure, cloud et qualité logicielle.",
     url: "https://www.quad-core.fr/",
     repo: null,
-    family: "site",
     layout: "wide",
-    featured: true,
-    cover: { name: "home", alt: "Page d'accueil du site QuadCore" },
     case: {
       context:
         "Un site de services informatiques se juge en quelques secondes : le visiteur cherche ce que vous faites, comment vous travaillez et comment vous joindre. QuadCore présente une offre de services IT et sert également de vitrine à Centrium.",
@@ -376,16 +355,15 @@ export const works: Work[] = [
       ],
       stack: ["Next.js", "TypeScript", "Vercel"],
       results: [],
-      gallery: [
-        { name: "home", alt: "Page d'accueil de QuadCore" },
-        { name: "full", alt: "Page d'accueil complète de QuadCore", caption: "Le déroulé : offre, méthode, produit, contact." },
-        { name: "mobile", alt: "QuadCore en version mobile" },
-      ],
     },
   },
 
   {
     slug: "royale-auto-ecole",
+    screenLabels: {
+      "p-qui-sommes-nous": "page qui sommes-nous",
+      "p-reglementation": "page réglementation et documents",
+    },
     name: "Royale Auto-école",
     kind: "Site vitrine multi-pages",
     sector: "Auto-école",
@@ -395,10 +373,7 @@ export const works: Work[] = [
     lead: "Sept pages pour répondre aux vraies questions d'un futur élève : quelle formation, quels documents, quel budget, comment s'inscrire.",
     url: "https://royale-one.vercel.app/",
     repo: "https://github.com/Salim-ers/Royale-Auto-cole",
-    family: "site",
     layout: "duo",
-    featured: true,
-    cover: { name: "home", alt: "Page d'accueil du site Royale Auto-école" },
     case: {
       context:
         "Une auto-école reçoit toujours les mêmes questions au téléphone : à partir de quel âge, quels papiers fournir, quelle différence entre conduite accompagnée et conduite supervisée. Le site répond à ces questions avant l'appel, et sert de support d'inscription.",
@@ -432,17 +407,16 @@ export const works: Work[] = [
       ],
       stack: ["JavaScript", "Next.js", "Vercel"],
       results: [],
-      gallery: [
-        { name: "home", alt: "Page d'accueil du site Royale Auto-école" },
-        { name: "formations", alt: "Page des formations de Royale Auto-école", caption: "La page qui porte la décision : neuf formations comparables." },
-        { name: "securite-routiere", alt: "Page sécurité routière de Royale Auto-école" },
-        { name: "mobile", alt: "Royale Auto-école en version mobile", caption: "La majorité des visites d'une auto-école vient du mobile." },
-      ],
     },
   },
 
   {
     slug: "noa-cafe",
+    screenLabels: {
+      "p-lieu": "page le lieu",
+      "p-histoire": "page notre histoire",
+      "p-venir": "page venir",
+    },
     name: "Noa Café",
     kind: "Site vitrine",
     sector: "Café de spécialité",
@@ -452,10 +426,7 @@ export const works: Work[] = [
     lead: "Un site court pour un lieu petit : la carte, l'adresse, les horaires, et l'envie d'y aller.",
     url: "https://noa-cafe-one.vercel.app/",
     repo: "https://github.com/Salim-ers/noa-caf-",
-    family: "site",
     layout: "column",
-    featured: true,
-    cover: { name: "home", alt: "Page d'accueil du site Noa Café" },
     case: {
       context:
         "Pour un café de quartier, un site n'a que trois missions : donner envie, dire où c'est et quand c'est ouvert. Tout le reste éloigne du seul geste utile, venir sur place.",
@@ -489,69 +460,6 @@ export const works: Work[] = [
       ],
       stack: ["JavaScript", "Next.js", "Vercel"],
       results: [],
-      gallery: [
-        { name: "home", alt: "Page d'accueil du site Noa Café" },
-        { name: "carte", alt: "Page carte du site Noa Café", caption: "La carte traitée comme un imprimé." },
-        { name: "mobile", alt: "Noa Café en version mobile" },
-      ],
-    },
-  },
-
-  {
-    slug: "essalam",
-    name: "Essalam — Grande Mosquée de Creil",
-    kind: "Site institutionnel",
-    sector: "Association cultuelle",
-    location: "Creil (60)",
-    status: "En ligne",
-    engagement: "demo",
-    lead: "Un site de service public associatif : horaires de prière, école, annonces, visite du lieu et dons.",
-    url: "https://accmo-gamma.vercel.app/",
-    repo: "https://github.com/Salim-ers/ACCMO",
-    family: "site",
-    layout: "wide",
-    featured: false,
-    cover: { name: "home", alt: "Page d'accueil du site de la Grande Mosquée de Creil" },
-    case: {
-      context:
-        "Une mosquée de quartier est consultée pour des informations très concrètes et très fréquentes : l'heure de la prière, l'inscription des enfants à l'école, un événement, un don. Le site doit donner ces réponses en une page, à toute heure, sur un téléphone.",
-      audience: "Fidèles et familles de Creil et des environs, de tous âges et de tous niveaux d'aisance numérique.",
-      role: "Conception, direction artistique, structuration des contenus et mise en ligne.",
-      work: [
-        "Mise en avant des horaires de prière et du créneau de la Jumu'a dès la page d'accueil.",
-        "Structuration de l'école Al Ghazali : enseignements, publics, inscriptions.",
-        "Intégration d'une visite virtuelle à 360° de la salle de prière.",
-        "Mise en place des rubriques annonces, solidarité et dons, et des informations d'accessibilité.",
-      ],
-      design: [
-        {
-          label: "L'information fréquente en premier",
-          detail: "Les horaires sont l'usage quotidien : ils passent avant toute présentation institutionnelle.",
-        },
-        {
-          label: "Lisible pour tout le monde",
-          detail: "Corps de texte généreux, contrastes appuyés, navigation courte : le public va de l'enfant au grand-parent.",
-        },
-        {
-          label: "Voir le lieu avant de venir",
-          detail: "La visite 360° répond à une question que personne ne pose à voix haute : à quoi ça ressemble à l'intérieur.",
-        },
-      ],
-      features: [
-        { label: "Horaires de prière", detail: "Cinq prières quotidiennes et Jumu'a." },
-        { label: "École Al Ghazali", detail: "Coran, langue arabe et sciences islamiques, enfants et adultes." },
-        { label: "Vie de la communauté", detail: "Annonces, événements, actions de solidarité." },
-        { label: "Visite 360°", detail: "Parcours virtuel de la salle de prière." },
-        { label: "Dons", detail: "Soutien au fonctionnement, à l'entretien et à l'enseignement." },
-      ],
-      stack: ["JavaScript", "Next.js", "Vercel"],
-      results: [],
-      gallery: [
-        { name: "home", alt: "Page d'accueil du site de la Grande Mosquée de Creil" },
-        { name: "full", alt: "Page d'accueil complète du site de la Grande Mosquée de Creil" },
-      ],
-      disclosure:
-        "Projet de démonstration : je l'ai conçu de ma propre initiative, à partir d'informations publiques. Il n'a pas été commandé par l'association et n'engage en rien celle-ci.",
     },
   },
 
@@ -566,10 +474,7 @@ export const works: Work[] = [
     lead: "Une vitrine courte pour une enseigne de restauration rapide : l'offre, l'adresse, le positionnement 100 % halal.",
     url: "https://ps-nine-theta.vercel.app/",
     repo: "https://github.com/Salim-ers/ps",
-    family: "site",
     layout: "compact",
-    featured: false,
-    cover: { name: "home", alt: "Page d'accueil du site Poulet Station" },
     case: {
       context:
         "En restauration rapide, le site sert avant la visite : savoir ce qu'on y mange, où c'est, et si ça correspond à ce qu'on cherche. Le positionnement halal est affiché dès l'en-tête parce que c'est le critère de choix.",
@@ -596,10 +501,6 @@ export const works: Work[] = [
       ],
       stack: ["JavaScript", "Next.js", "Vercel"],
       results: [],
-      gallery: [
-        { name: "home", alt: "Page d'accueil du site Poulet Station" },
-        { name: "mobile", alt: "Poulet Station en version mobile" },
-      ],
     },
   },
 ];

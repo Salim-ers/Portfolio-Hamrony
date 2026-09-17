@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Gateway } from "@/components/gateway/Gateway";
-import { shot } from "@/lib/shots";
+import { firstShot } from "@/lib/shots";
+import { works } from "@/data/works";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -12,10 +13,26 @@ export const metadata: Metadata = {
  * directement, depuis la navigation persistante comme depuis l'extérieur.
  */
 export default function HomePage() {
-  const creationShot = shot(
-    "centrium",
-    "home",
-    "Aperçu de Centrium, plateforme de pilotage pour sociétés de conseil, réalisée et mise en ligne"
+  return (
+    <Gateway
+      workCount={works.length}
+      shots={{
+        primary: firstShot(
+          "centrium",
+          ["home"],
+          "Centrium, plateforme de pilotage pour sociétés de conseil, conçue et mise en ligne"
+        ),
+        secondary: firstShot(
+          "horse-ledger",
+          ["home"],
+          "Horse Ledger, plateforme de gestion pour la filière équine, conçue et mise en ligne"
+        ),
+        mobile: firstShot(
+          "royale-auto-ecole",
+          ["mobile"],
+          "Site de Royale Auto-école en version mobile"
+        ),
+      }}
+    />
   );
-  return <Gateway creationShot={creationShot} />;
 }

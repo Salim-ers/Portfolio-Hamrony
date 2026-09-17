@@ -97,3 +97,101 @@ export function availableShots(slug: string): string[] {
     .filter((f) => f.endsWith(".jpg"))
     .map((f) => f.replace(/\.jpg$/, ""));
 }
+
+/* ==================================================================
+   Sélection et nommage des écrans d'un projet
+================================================================== */
+
+export type ScreenKind = "home" | "full" | "page" | "section" | "mobile";
+
+export type Screen = Shot & { name: string; kind: ScreenKind };
+
+/**
+ * Les noms de fichiers viennent des URLs des sites capturés : ils ont
+ * perdu leurs accents. Ce dictionnaire les restitue pour que les textes
+ * alternatifs restent du français correct.
+ */
+const WORDS: Record<string, string> = {
+  a: "à",
+  propos: "propos",
+  securite: "sécurité",
+  routiere: "routière",
+  reglementation: "réglementation",
+  fonctionnalites: "fonctionnalités",
+  realisations: "réalisations",
+  apropos: "à propos",
+  demarrer: "démarrer",
+  decouvrir: "découvrir",
+  reserver: "réserver",
+  evenements: "événements",
+  activites: "activités",
+  hebergement: "hébergement",
+  itineraire: "itinéraire",
+  destinations: "destinations",
+  methode: "méthode",
+  references: "références",
+  equipe: "équipe",
+  ecole: "école",
+  ecurie: "écurie",
+  demo: "démonstration",
+  demande: "demande",
+  demarche: "démarche",
+  electronique: "électronique",
+  essai: "essai",
+  plateforme: "plateforme",
+  engagements: "engagements",
+  conseils: "conseils",
+};
+
+function humanize(slug: string): string {
+  return slug
+    .split("-")
+    .map((w) => WORDS[w] ?? w)
+    .join(" ");
+}
+
+const ORDINALS = ["", "", "deuxième", "troisième", "quatrième", "cinquième"];
+
+/** Libellé lisible d'un écran, utilisé dans le texte alternatif et la légende. */
+export function screenLabel(name: string): string {
+  if (name === "home") return "page d'accueil";
+  if (name === "full") return "page d'accueil, vue complète";
+  if (name === "mobile") return "version mobile";
+  if (/^s\d+$/.test(name)) {
+    const i = Number(name.slice(1));
+    return `${ORDINALS[i] ?? "autre"} partie de la page d'accueil`;
+  }
+  if (name.startsWith("p-")) return `page ${humanize(name.slice(2))}`;
+  return humanize(name);
+}
+
+function kindOf(name: string): ScreenKind {
+  if (name === "home") return "home";
+  if (name === "full") return "full";
+  if (name === "mobile") return "mobile";
+  if (name.startsWith("p-")) return "page";
+  return "section";
+}
+
+/**
+ * Tous les écrans réellement capturés pour un projet, classés dans un
+ * ordre de lecture : accueil, pages internes, sections, version mobile.
+ * `labels` permet de remplacer un libellé généré par un libellé écrit.
+ */
+export function projectScreens(
+  slug: string,
+  projectName: string,
+  labels: Record<string, string> = {}
+): Screen[] {
+  const order: Record<ScreenKind, number> = { home: 0, page: 1, section: 2, mobile: 3, full: 4 };
+  return availableShots(slug)
+    .map((name) => ({ name, kind: kindOf(name) }))
+    .filter((s) => s.kind !== "full")
+    .sort((a, b) => order[a.kind] - order[b.kind] || a.name.localeCompare(b.name, "fr"))
+    .map(({ name, kind }) => {
+      const label = labels[name] ?? screenLabel(name);
+      const found = shot(slug, name, `${projectName}, ${label}`);
+      return found ? { ...found, name, kind } : null;
+    })
+    .filter((s): s is Screen => s !== null);
+}

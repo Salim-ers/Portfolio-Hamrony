@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { works, sideWorks } from "@/data/works";
+import { company } from "@/data/profile";
 import { contact } from "@/data/profile";
-import { shot } from "@/lib/shots";
+import { firstShot } from "@/lib/shots";
 import { Container } from "@/components/ui/Container";
 import { Section, SectionHead } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
@@ -22,7 +23,7 @@ const SERVICES = [
     n: "01",
     label: "Sites vitrines",
     line: "Un site court et juste pour un établissement : ce qu'on y fait, où c'est, comment venir ou vous joindre.",
-    examples: "Royale Auto-école · Noa Café · Poulet Station · Essalam",
+    examples: "Royale Auto-école · Noa Café · Poulet Station",
   },
   {
     n: "02",
@@ -38,34 +39,39 @@ const SERVICES = [
   },
 ];
 
+/** Bande d'ouverture : quatre écrans réels, côte à côte, pleine largeur. */
+const STRIP: { slug: string; name: string; alt: string }[] = [
+  { slug: "centrium", name: "home", alt: "Centrium, plateforme de pilotage pour sociétés de conseil" },
+  { slug: "horse-ledger", name: "home", alt: "Horse Ledger, gestion pour la filière équine" },
+  { slug: "royale-auto-ecole", name: "home", alt: "Site de Royale Auto-école" },
+  { slug: "odyssea", name: "home", alt: "Odyssea, composition de voyages sur mesure" },
+];
+
 export default function CreationPage() {
-  const opener = shot("horse-ledger", "home", "Horse Ledger, plateforme de gestion pour les professionnels du cheval");
+  const strip = STRIP.map((s) => firstShot(s.slug, [s.name, "home"], s.alt)).filter((s) => s !== null);
 
   return (
     <>
       {/* ---------------- Hero court ---------------- */}
       <header className="pt-16">
-        <Container className="pb-12 pt-16 md:pb-16 md:pt-24">
+        <Container className="pb-9 pt-12 md:pb-10 md:pt-16">
           <p className="lift-in font-mono text-tech uppercase tracking-[0.18em] text-ink-3" style={{ ["--delay" as string]: "60ms" }}>
-            Univers 01 — Création numérique
+            {company.name} — Création web & applications
           </p>
-          <h1 className="mt-7 text-mega text-ink">
+          <h1 className="mt-5 max-w-[20ch] text-display text-ink">
             <span className="word-mask" style={{ ["--delay" as string]: "140ms" }}>
-              <span>Je conçois</span>
+              <span>Des projets</span>
             </span>{" "}
-            <span className="word-mask" style={{ ["--delay" as string]: "250ms" }}>
-              <span>des produits</span>
-            </span>{" "}
-            <span className="word-mask text-accent-ink" style={{ ["--delay" as string]: "360ms" }}>
-              <span>qui existent.</span>
+            <span className="word-mask text-accent-ink" style={{ ["--delay" as string]: "260ms" }}>
+              <span>que vous pouvez ouvrir.</span>
             </span>
           </h1>
-          <div className="mt-8 grid gap-6 md:grid-cols-12 md:items-end">
-            <p className="lift-in text-lede text-ink-2 md:col-span-6" style={{ ["--delay" as string]: "560ms" }}>
-              Des sites vitrines, des applications et des plateformes SaaS. Tous les projets présentés ici sont en ligne
-              et consultables : vous pouvez ouvrir chaque lien et juger par vous-même.
+          <div className="mt-7 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <p className="lift-in max-w-[48ch] text-lede text-ink-2" style={{ ["--delay" as string]: "500ms" }}>
+              Sites vitrines, applications et produits SaaS. Chaque projet présenté ici est en ligne : le lien est sur
+              sa page.
             </p>
-            <div className="lift-in flex flex-wrap gap-3 md:col-span-6 md:justify-end" style={{ ["--delay" as string]: "680ms" }}>
+            <div className="lift-in flex flex-wrap gap-3" style={{ ["--delay" as string]: "620ms" }}>
               <ButtonLink href="#realisations" variant="primary">
                 Voir les réalisations
               </ButtonLink>
@@ -74,17 +80,21 @@ export default function CreationPage() {
           </div>
         </Container>
 
-        {/* Grande ouverture visuelle : une capture réelle, pleine largeur. */}
-        {opener && (
-          <Reveal effect="mask" className="overflow-hidden border-y border-line">
-            <Shot
-              shot={opener}
-              crop="top"
-              priority
-              sizes="100vw"
-              className="[&_img]:aspect-[21/9] [&_img]:w-full"
-            />
-          </Reveal>
+        {/* Bande d'écrans réels : le travail avant le discours. */}
+        {strip.length > 0 && (
+          <div className="grid grid-cols-2 gap-px border-y border-line bg-line md:grid-cols-4">
+            {strip.map((s, i) => (
+              <Reveal key={s.src} effect="mask" delay={i * 110} className="overflow-hidden bg-paper">
+                <Shot
+                  shot={s}
+                  crop="top"
+                  priority={i < 2}
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="[&_img]:aspect-[4/3]"
+                />
+              </Reveal>
+            ))}
+          </div>
         )}
       </header>
 
@@ -92,11 +102,10 @@ export default function CreationPage() {
       <Section id="realisations" size="loose">
         <SectionHead
           index="Réalisations"
-          title="Neuf projets en ligne."
+          title={`${works.length} projets en ligne.`}
           lede={
             <p>
-              Produits SaaS et sites d&apos;établissement. Pour chacun : le besoin, mon rôle exact, les choix de
-              conception et le lien vers le site réel.
+              Pour chacun : plusieurs écrans du site réel, le besoin, mon rôle exact et les choix de conception.
             </p>
           }
           align="split"

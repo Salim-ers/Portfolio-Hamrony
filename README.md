@@ -83,10 +83,25 @@ npm run captures              # tous les sites
 npm run captures -- odyssea   # un seul
 ```
 
-Les cibles sont déclarées dans `scripts/shots.config.mjs`. Le script produit
-`/public/shots/<slug>/{home,full,mobile,<route>}.jpg` et **refuse** une capture
-dont l'URL finale diffère de l'URL demandée : une page protégée qui redirige
-vers `/login` ne peut donc pas être légendée comme une page produit.
+Les cibles sont déclarées dans `scripts/shots.config.mjs`. Pour chaque site,
+le script capture la page d'accueil (`home`, `mobile`), **découvre les pages
+internes** dans la navigation (`p-<route>`, plafonné par `maxRoutes`) et prend
+trois vues réparties dans le défilement (`s2`, `s3`, `s4`) — c'est ce qui permet
+de montrer le travail sur tout le site et pas seulement sur le pli supérieur.
+
+Trois garde-fous :
+
+- une page dont l'URL finale diffère de l'URL demandée n'est pas capturée : une
+  page protégée qui redirige vers `/login` ne peut pas être légendée comme une
+  page produit ;
+- les pages légales, comptes et tunnels d'achat sont exclus (`SKIP`) ;
+- les bandeaux cookies sont refusés — à défaut acceptés — avant et après le
+  défilement, pour qu'aucun bandeau ne recouvre le travail.
+
+Le portfolio lit ensuite ces fichiers via `projectScreens()` : **ajouter une
+capture suffit à l'afficher**, il n'y a aucune liste à tenir à jour. Les libellés
+sont déduits du nom de fichier, et `screenLabels` dans `data/works.ts` permet
+d'en écrire un à la main quand le nom de l'URL ne suffit pas.
 
 Après une nouvelle campagne, mettre à jour `capturedOn` dans `data/works.ts`.
 

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { works, getWork, capturedOn, engagementLabel } from "@/data/works";
 import { contact } from "@/data/profile";
-import { shot, shots } from "@/lib/shots";
+import { projectScreens, screenLabel } from "@/lib/shots";
 import { hostname } from "@/lib/utils";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
@@ -33,10 +33,11 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   const work = getWork(slug);
   if (!work) notFound();
 
-  const hero = shot(work.slug, work.cover.name, work.cover.alt);
-  const gallery = shots(work.slug, work.case.gallery);
+  // Tous les écrans réellement capturés, dans l'ordre de lecture.
+  const screens = projectScreens(work.slug, work.name, work.screenLabels);
+  const hero = screens.find((s) => s.kind === "home") ?? screens[0] ?? null;
   // La capture de tête est déjà affichée : on ne la répète pas plus bas.
-  const rest = gallery.filter((g) => g.src !== hero?.src);
+  const rest = screens.filter((s) => s !== hero);
 
   const i = works.findIndex((w) => w.slug === work.slug);
   const next = works[(i + 1) % works.length];
@@ -182,22 +183,33 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           <p className="mt-3 max-w-[54ch] text-small text-ink-3">
             Captures du site réellement en ligne, prises le {capturedOn}.
           </p>
-          <div className="mt-12 flex flex-col gap-16">
-            {rest.map((g, idx) => {
-              const isMobile = g.src.endsWith("/mobile.jpg");
-              return (
+          {/* Les pages internes se lisent deux par deux ; la version mobile
+              garde son propre cadre, plus étroit. */}
+          <div className="mt-12 grid gap-x-6 gap-y-12 md:grid-cols-2">
+            {rest.map((screen) =>
+              screen.kind === "mobile" ? (
                 <RevealedShot
-                  key={g.src}
-                  shot={g}
-                  frame={isMobile ? "device" : "browser"}
-                  address={!isMobile && work.url ? hostname(work.url) : null}
+                  key={screen.name}
+                  shot={screen}
+                  caption={screenCaption(screen.name, work.screenLabels)}
+                  frame="device"
                   crop="top"
-                  sizes={isMobile ? "(max-width: 768px) 60vw, 300px" : "(max-width: 768px) 100vw, 1100px"}
-                  figureClassName={isMobile ? "max-w-[300px]" : undefined}
-                  className={idx % 2 === 1 && !isMobile ? "md:ml-[6%]" : undefined}
+                  sizes="(max-width: 768px) 60vw, 280px"
+                  figureClassName="max-w-[280px] md:col-span-2"
                 />
-              );
-            })}
+              ) : (
+                <RevealedShot
+                  key={screen.name}
+                  shot={screen}
+                  caption={screenCaption(screen.name, work.screenLabels)}
+                  frame="browser"
+                  address={work.url ? hostname(work.url) : null}
+                  crop="top"
+                  sizes="(max-width: 768px) 100vw, 560px"
+                  className="[&_img]:aspect-[4/3]"
+                />
+              )
+            )}
           </div>
         </Section>
       )}
@@ -278,6 +290,12 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       </Section>
     </article>
   );
+}
+
+/** Légende d'un écran : le libellé écrit s'il existe, sinon celui déduit. */
+function screenCaption(name: string, labels?: Record<string, string>) {
+  const raw = labels?.[name] ?? screenLabel(name);
+  return raw.charAt(0).toUpperCase() + raw.slice(1);
 }
 
 function Field({ label, value, className }: { label: string; value: string; className?: string }) {

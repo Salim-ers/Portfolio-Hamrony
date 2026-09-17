@@ -24,12 +24,12 @@ export default function SystemesPage() {
     <>
       {/* ---------------- Hero ---------------- */}
       <header className="pt-16">
-        <Container className="py-16 md:py-24">
+        <Container className="py-12 md:py-20">
           <p className="lift-in font-mono text-tech uppercase tracking-[0.18em] text-ink-3" style={{ ["--delay" as string]: "60ms" }}>
             Univers 02 — Systèmes, réseaux & support IT
           </p>
 
-          <h1 className="mt-7 text-mega text-ink">
+          <h1 className="mt-6 text-display text-ink">
             <span className="word-mask" style={{ ["--delay" as string]: "140ms" }}>
               <span>Administrer,</span>
             </span>{" "}

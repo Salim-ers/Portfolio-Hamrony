@@ -32,10 +32,10 @@ const RX = 260;
 
 export function LabSchematic() {
   return (
-    <InView className="flex h-full w-full items-center justify-center" rootMargin="0px">
+    <InView className="flex h-full w-full items-start justify-center" rootMargin="0px">
       <svg
         viewBox="0 0 440 310"
-        className="h-full max-h-[320px] w-full"
+        className="h-full max-h-[440px] w-full"
         role="img"
         aria-label="Schéma de principe du laboratoire : accès opérateur, pare-feu, commutation, virtualisation, puis serveurs Windows, Linux et supervision."
         preserveAspectRatio="xMidYMid meet"
