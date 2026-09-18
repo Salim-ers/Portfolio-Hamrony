@@ -1,65 +1,76 @@
 @import "tailwindcss";
 
 /* ==================================================================
-   DEUX PRATIQUES, UNE MÊME SIGNATURE
+   PORTFOLIO SALIM EL RHALMANI — SYSTÈME GRAPHIQUE
    ------------------------------------------------------------------
-   Une seule identité typographique et un seul rythme de composition
-   relient les deux univers. Tout le reste — fond, encre, accent,
-   densité, interactions — bascule avec l'attribut [data-universe].
+   Toute la palette est tirée du logo Harmony Solutions réel
+   (public/brand/harmony-logo-source.png), échantillonné :
 
-     data-universe="creation" → ivoire, encre, accent vermillon
-     data-universe="systems"  → graphite, texte clair, accent bleu
+     marine    #172a4a   fond du logo
+     laiton    #c6a570   monogramme
+     ivoire    #e3eaf2   wordmark
 
-   Les composants n'utilisent jamais une couleur en dur : ils lisent
-   --paper / --ink / --accent, ce qui rend n'importe quel bloc
-   réutilisable dans les deux ambiances.
+   Rythme : environ 70 % de surfaces claires, 30 % de sections marine.
+   Les sections marine marquent les moments techniques — laboratoire,
+   infrastructure — et servent de respiration entre les blocs clairs.
+
+   Le thème bascule par `data-surface="dark"` sur n'importe quel
+   conteneur. Les composants ne codent aucune couleur en dur : ils
+   lisent --paper / --ink / --accent.
 ================================================================== */
 
 @theme {
   --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
-  --font-serif: var(--font-cormorant), "Iowan Old Style", Georgia, serif;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
 
-  /* --- Échelle typographique commune aux deux univers --- */
-  --text-mega: clamp(3.1rem, 10.5vw, 9rem);
-  --text-mega--line-height: 0.86;
+  /* --- Échelle typographique --- */
+  /* Borné par la largeur ET par la hauteur : sur un écran large et peu
+     haut, un titre calculé sur la seule largeur pousse les appels à
+     l'action sous le pli. */
+  --text-colossal: clamp(3.4rem, min(13vw, 17svh), 12rem);
+  --text-colossal--line-height: 0.82;
+  --text-colossal--letter-spacing: -0.05em;
+  --text-colossal--font-weight: 600;
+
+  --text-mega: clamp(2.8rem, 8vw, 6.5rem);
+  --text-mega--line-height: 0.9;
   --text-mega--letter-spacing: -0.045em;
   --text-mega--font-weight: 600;
 
-  --text-display: clamp(2.6rem, 6.6vw, 5.25rem);
-  --text-display--line-height: 0.94;
-  --text-display--letter-spacing: -0.04em;
+  --text-display: clamp(2.3rem, 5.2vw, 4rem);
+  --text-display--line-height: 0.98;
+  --text-display--letter-spacing: -0.038em;
   --text-display--font-weight: 600;
 
-  --text-h1: clamp(2.1rem, 4.6vw, 3.6rem);
-  --text-h1--line-height: 1.02;
-  --text-h1--letter-spacing: -0.033em;
+  --text-h1: clamp(1.9rem, 3.6vw, 2.9rem);
+  --text-h1--line-height: 1.06;
+  --text-h1--letter-spacing: -0.03em;
   --text-h1--font-weight: 600;
 
-  --text-h2: clamp(1.6rem, 2.9vw, 2.3rem);
-  --text-h2--line-height: 1.1;
-  --text-h2--letter-spacing: -0.025em;
+  --text-h2: clamp(1.45rem, 2.3vw, 1.9rem);
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.022em;
   --text-h2--font-weight: 580;
 
-  --text-h3: 1.28rem;
-  --text-h3--line-height: 1.28;
+  --text-h3: 1.2rem;
+  --text-h3--line-height: 1.32;
   --text-h3--letter-spacing: -0.012em;
   --text-h3--font-weight: 560;
 
-  --text-lede: clamp(1.1rem, 1.45vw, 1.35rem);
-  --text-lede--line-height: 1.52;
+  --text-lede: clamp(1.1rem, 1.35vw, 1.3rem);
+  --text-lede--line-height: 1.55;
 
   --text-body-lg: 1.0625rem;
-  --text-body-lg--line-height: 1.62;
+  --text-body-lg--line-height: 1.65;
 
   --text-body: 1rem;
-  --text-body--line-height: 1.62;
+  --text-body--line-height: 1.65;
 
   --text-small: 0.875rem;
-  --text-small--line-height: 1.5;
+  --text-small--line-height: 1.55;
 
   --text-label: 0.8125rem;
   --text-label--line-height: 1.35;
@@ -67,10 +78,10 @@
 
   --text-tech: 0.75rem;
   --text-tech--line-height: 1.45;
-  --text-tech--letter-spacing: 0.04em;
+  --text-tech--letter-spacing: 0.08em;
 
-  /* Couleurs exposées à Tailwind. Les valeurs réelles sont définies
-     plus bas, par univers. */
+  /* Alias lus par les utilitaires Tailwind. Les valeurs réelles sont
+     définies par thème plus bas, et réexposées dans chaque bloc. */
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
   --color-surface: var(--surface);
@@ -81,38 +92,30 @@
   --color-line-2: var(--line-2);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
-  --color-accent-soft: var(--accent-soft);
   --color-on-accent: var(--on-accent);
 
   --z-index-sticky: 40;
-  --z-index-overlay: 60;
 }
 
 /* ------------------------------------------------------------------
-   Thèmes d'univers
+   Thème clair — ivoire tiède, encre marine
 ------------------------------------------------------------------ */
 :root,
-[data-universe="creation"] {
-  /* Ivoire et encre. Le vermillon ne sert qu'aux signaux : filet,
-     numéro, soulignement, état actif. */
-  --paper: #f5f2ea;
-  --paper-2: #ece7db;
-  --surface: #fffefb;
-  --ink: #17140f;
-  --ink-2: #4f4a42;   /* 8.4:1 sur ivoire */
-  --ink-3: #736c60;   /* 5.1:1 sur ivoire */
-  --line: #ded6c6;
-  --line-2: #c4baa6;
-  --accent: #cf3f1e;        /* filets, traits, aplats décoratifs */
-  --accent-ink: #a52d10;    /* 5.4:1 sur ivoire — texte et liens */
-  --accent-soft: #f6e3dc;
-  --on-accent: #fffefb;
-  --shadow-soft: 0 1px 2px rgb(23 20 15 / 0.05), 0 12px 32px -14px rgb(23 20 15 / 0.22);
+[data-surface="light"] {
+  --paper: #f7f4ed;
+  --paper-2: #efeade;
+  --surface: #fffdf8;
+  --ink: #131a28;      /* marine très sombre, jamais du noir pur */
+  --ink-2: #4a5364;    /* 8.6:1 sur ivoire */
+  --ink-3: #707a8a;    /* 4.9:1 sur ivoire */
+  --line: #e3ddcf;
+  --line-2: #cabfa7;
+  --accent: #c6a570;      /* laiton du logo — filets, marques, tracés */
+  --accent-ink: #7d5f22;  /* 5.3:1 sur ivoire — texte et liens */
+  --on-accent: #131a28;
+  --shadow: 0 1px 2px rgb(19 26 40 / 0.05), 0 24px 60px -28px rgb(19 26 40 / 0.28);
+  color-scheme: light;
 
-  /* Réexposition locale des alias Tailwind : une variable est résolue là
-     où elle est déclarée. Sans ces lignes, `bg-paper` ou `text-ink`
-     resteraient figés sur les valeurs de :root et le thème ne
-     s'appliquerait pas au sous-arbre. */
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
   --color-surface: var(--surface);
@@ -123,31 +126,27 @@
   --color-line-2: var(--line-2);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
-  --color-accent-soft: var(--accent-soft);
   --color-on-accent: var(--on-accent);
-  color-scheme: light;
 }
 
-[data-universe="systems"] {
-  /* Graphite et bleu électrique. Fond sombre, texte clair, filets nets. */
-  --paper: #121419;
-  --paper-2: #181b21;
-  --surface: #1c2027;
-  --ink: #edf0f5;
-  --ink-2: #a9b2c0;   /* 8.0:1 sur graphite */
-  --ink-3: #7e8899;   /* 5.0:1 sur graphite */
-  --line: #262b34;
-  --line-2: #363d49;
-  --accent: #4f8cff;
-  --accent-ink: #78a8ff;    /* 7.3:1 sur graphite — texte et liens */
-  --accent-soft: #1a2436;
-  --on-accent: #0a0d13;
-  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.4), 0 18px 44px -18px rgb(0 0 0 / 0.7);
+/* ------------------------------------------------------------------
+   Thème sombre — le marine exact du logo
+------------------------------------------------------------------ */
+[data-surface="dark"] {
+  --paper: #172a4a;
+  --paper-2: #13223d;
+  --surface: #1d3357;
+  --ink: #eef2f8;
+  --ink-2: #aebbd0;    /* 8.2:1 sur marine */
+  --ink-3: #8593ab;    /* 5.1:1 sur marine */
+  --line: #27395c;
+  --line-2: #3a4d72;
+  --accent: #c6a570;      /* 6.2:1 sur marine — utilisable en texte */
+  --accent-ink: #d9bc8a;  /* 7.8:1 sur marine */
+  --on-accent: #131a28;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 28px 70px -30px rgb(0 0 0 / 0.75);
+  color-scheme: dark;
 
-  /* Réexposition locale des alias Tailwind : une variable est résolue là
-     où elle est déclarée. Sans ces lignes, `bg-paper` ou `text-ink`
-     resteraient figés sur les valeurs de :root et le thème ne
-     s'appliquerait pas au sous-arbre. */
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
   --color-surface: var(--surface);
@@ -158,9 +157,7 @@
   --color-line-2: var(--line-2);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
-  --color-accent-soft: var(--accent-soft);
   --color-on-accent: var(--on-accent);
-  color-scheme: dark;
 }
 
 @layer base {
@@ -171,25 +168,17 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scrollbar-gutter: stable;
   }
-  /* L'univers est porté par un conteneur dans la page, mais la couleur de
-     fond du document doit suivre : sinon l'ivoire réapparaît au rebond de
-     défilement sur les pages graphite. `:has` résout cela sans JavaScript.
-     La règle « creation » vient en dernier : sur la porte d'entrée, où les
-     deux univers coexistent, c'est l'ivoire qui l'emporte. */
-  html:has([data-universe="systems"]) { background: #121419; color-scheme: dark; }
-  html:has([data-universe="creation"]) { background: #f5f2ea; color-scheme: light; }
-
   body {
-    background: transparent;
+    background: var(--paper);
     color: var(--ink);
     font-family: var(--font-sans);
     font-size: var(--text-body);
-    line-height: 1.62;
+    line-height: 1.65;
     min-height: 100dvh;
     overflow-x: hidden;
     font-feature-settings: "ss01", "cv11";
-    transition: background-color 420ms var(--ease-out), color 420ms var(--ease-out);
   }
   h1, h2, h3 { text-wrap: balance; }
   p { text-wrap: pretty; }
@@ -211,102 +200,92 @@
 @layer components {
 
   /* =============================================================
-     GARDE-FOU : tous les états « masqués » ci-dessous sont portés par
-     [data-motion="on"], attribut posé sur <html> par un script inline
-     seulement si le JavaScript s'exécute ET que l'utilisateur n'a pas
-     demandé moins d'animations. Sans JavaScript, sans ce script ou avec
-     prefers-reduced-motion, rien n'est masqué : tout le contenu est
-     lisible immédiatement, dans son état final.
+     GARDE-FOU
+     Tous les états « masqués » sont portés par [data-motion="on"],
+     attribut posé sur <html> par un script inline uniquement si le
+     JavaScript s'exécute et que l'utilisateur n'a pas demandé moins
+     d'animations. Sans JavaScript, rien n'est masqué.
   ============================================================= */
 
-  /* =============================================================
-     1. Entrée du hero par groupes de mots.
-     Le texte est dans le DOM et lisible même si l'animation échoue.
-  ============================================================= */
-  .word-mask { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.09em; }
+  /* --- Entrée : par groupes de mots --- */
+  .word-mask { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.1em; }
   [data-motion="on"] .word-mask > span {
     display: inline-block;
     transform: translateY(105%);
-    animation: word-up 780ms var(--ease-out) forwards;
+    animation: word-up 900ms var(--ease-out) forwards;
     animation-delay: var(--delay, 0ms);
   }
   @keyframes word-up { to { transform: translateY(0); } }
 
   [data-motion="on"] .lift-in {
     opacity: 0;
-    transform: translateY(14px);
-    animation: lift-in 600ms var(--ease-out) forwards;
+    transform: translateY(16px);
+    animation: lift-in 700ms var(--ease-out) forwards;
     animation-delay: var(--delay, 0ms);
   }
   @keyframes lift-in { to { opacity: 1; transform: none; } }
 
-  /* =============================================================
-     2. Révélation au défilement : quatre familles distinctes,
-     pour ne jamais rejouer le même effet deux sections de suite.
-  ============================================================= */
+  /* --- Révélation au défilement : quatre familles distinctes --- */
 
-  /* a. masque vertical — réservé aux captures.
-     Le clip est porté par le conteneur, l'agrandissement par son contenu :
-     si l'élément qui clippe s'agrandissait lui-même, il déborderait de la
-     page en pleine largeur. */
+  /* a. masque vertical — réservé aux captures */
   [data-motion="on"] .mask-in {
     clip-path: inset(0 0 100% 0);
-    transition: clip-path 900ms var(--ease-in-out);
+    transition: clip-path 1000ms var(--ease-in-out);
   }
   [data-motion="on"] .mask-in > * {
-    transform: scale(1.04);
-    transition: transform 1100ms var(--ease-out);
+    transform: scale(1.05);
+    transition: transform 1200ms var(--ease-out);
   }
   [data-visible="true"] .mask-in,
   .mask-in[data-visible="true"] { clip-path: inset(0 0 0 0); }
   [data-visible="true"] .mask-in > *,
   .mask-in[data-visible="true"] > * { transform: none; }
 
-  /* b. filet qui se trace — titres de section et séparateurs */
-  [data-motion="on"] .rule-in { transform: scaleX(0); transform-origin: left; transition: transform 700ms var(--ease-in-out); }
+  /* b. filet qui se trace — séparateurs et intertitres */
+  [data-motion="on"] .rule-in { transform: scaleX(0); transform-origin: left; transition: transform 800ms var(--ease-in-out); }
   [data-visible="true"] .rule-in,
   .rule-in[data-visible="true"] { transform: scaleX(1); }
 
   /* c. glissement latéral — colonnes éditoriales */
   [data-motion="on"] .slide-in {
     opacity: 0;
-    transform: translateX(var(--from, -18px));
-    transition: opacity 620ms var(--ease-out), transform 720ms var(--ease-out);
+    transform: translateX(var(--from, -20px));
+    transition: opacity 700ms var(--ease-out), transform 800ms var(--ease-out);
     transition-delay: var(--delay, 0ms);
   }
   [data-visible="true"] .slide-in,
   .slide-in[data-visible="true"] { opacity: 1; transform: none; }
-  /* Sous 768px les gouttières sont trop étroites pour un décalage
-     latéral : il déborderait de la page. On passe à une montée. */
   @media (max-width: 767px) {
-    [data-motion="on"] .slide-in { transform: translateY(16px); }
+    [data-motion="on"] .slide-in { transform: translateY(18px); }
   }
 
-  /* d. montée simple — listes et détails techniques */
+  /* d. montée — listes et détails */
   [data-motion="on"] .rise-in {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 560ms var(--ease-out), transform 640ms var(--ease-out);
+    transform: translateY(22px);
+    transition: opacity 620ms var(--ease-out), transform 720ms var(--ease-out);
     transition-delay: var(--delay, 0ms);
   }
   [data-visible="true"] .rise-in,
   .rise-in[data-visible="true"] { opacity: 1; transform: none; }
 
-  /* =============================================================
-     3. Profondeur légère — souris et écran fin uniquement
-  ============================================================= */
-  .depth-layer { transition: transform 480ms var(--ease-out); }
-  @media (hover: hover) and (pointer: fine) {
-    .depth { perspective: 1200px; }
-    .depth-layer {
-      transform: rotateX(calc(var(--py, 0) * -3.2deg)) rotateY(calc(var(--px, 0) * 4deg));
-    }
+  /* --- Tracé des lignes du logo et des schémas --- */
+  [data-motion="on"] .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  [data-visible="true"] .draw {
+    animation: draw 1000ms var(--ease-in-out) forwards;
+    animation-delay: var(--delay, 0ms);
   }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
 
-  /* =============================================================
-     4. Retours d'interaction
-  ============================================================= */
-  .press { transition: transform 150ms var(--ease-out), background-color 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out), opacity 200ms var(--ease-out); }
+  /* Flux réseau : illustre un sens de circulation, jamais une mesure. */
+  .flow {
+    stroke-dasharray: 0.06 0.94;
+    animation: flow var(--flow-duration, 3200ms) linear infinite;
+  }
+  @keyframes flow { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+  /* --- Retours d'interaction --- */
+  .press { transition: transform 150ms var(--ease-out), background-color 220ms var(--ease-out), color 220ms var(--ease-out), border-color 220ms var(--ease-out), opacity 220ms var(--ease-out); }
   .press:active { transform: scale(0.975); }
 
   .link-underline {
@@ -314,7 +293,7 @@
     background-size: 0% 1px;
     background-position: 0 100%;
     background-repeat: no-repeat;
-    transition: background-size 320ms var(--ease-out), color 160ms var(--ease-out);
+    transition: background-size 340ms var(--ease-out), color 180ms var(--ease-out);
   }
   @media (hover: hover) and (pointer: fine) {
     .link-underline:hover { background-size: 100% 1px; }
@@ -322,73 +301,94 @@
   .link-underline:focus-visible { background-size: 100% 1px; }
 
   @media (hover: hover) and (pointer: fine) {
-    .focus-group:has(.focus-item:hover) .focus-item:not(:hover) { opacity: 0.4; }
+    .focus-group:has(.focus-item:hover) .focus-item:not(:hover) { opacity: 0.42; }
   }
-  .focus-item { transition: opacity 280ms var(--ease-out); }
+  .focus-item { transition: opacity 300ms var(--ease-out); }
 
   /* =============================================================
-     5. Schémas techniques — tracé et flux.
-     Le flux illustre un principe de fonctionnement : il ne représente
-     aucune mesure et n'est jamais une supervision réelle.
+     LANGAGE GRAPHIQUE DÉRIVÉ DU LOGO
+     Le monogramme Harmony est construit en traits parallèles. Ce motif
+     devient la grammaire du site : les filets sont doubles, les repères
+     sont des équerres, le fond porte de fines verticales appariées.
   ============================================================= */
-  [data-motion="on"] .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
-  [data-visible="true"] .draw {
-    animation: draw 1100ms var(--ease-in-out) forwards;
-    animation-delay: var(--delay, 0ms);
-  }
-  @keyframes draw { to { stroke-dashoffset: 0; } }
 
-  .flow {
-    stroke-dasharray: 0.05 0.95;
-    animation: flow var(--flow-duration, 3000ms) linear infinite;
+  /* Filet double, comme les montants du monogramme */
+  .rule-double {
+    border: 0;
+    height: 3px;
+    background:
+      linear-gradient(var(--line-2), var(--line-2)) top left / 100% 1px no-repeat,
+      linear-gradient(var(--line), var(--line)) bottom left / 100% 1px no-repeat;
   }
-  @keyframes flow { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+  /* Équerre : le coin du monogramme, utilisé comme puce ou repère */
+  .bracket {
+    position: relative;
+    padding-left: 1.15rem;
+  }
+  .bracket::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-left: 1.5px solid var(--accent);
+    border-top: 1.5px solid var(--accent);
+  }
+
+  /* Colonnes appariées, très discrètes, en fond de composition */
+  .ruled-bg {
+    background-image:
+      linear-gradient(to right, var(--line) 1px, transparent 1px),
+      linear-gradient(to right, var(--line) 1px, transparent 1px);
+    background-size: 25% 100%, 25% 100%;
+    background-position: 0 0, 6px 0;
+    opacity: 0.5;
+  }
 
   /* =============================================================
-     6. Utilitaires de composition
+     Défilement piloté par la vue (amélioration progressive).
+     Sans support, les éléments s'affichent simplement en place.
   ============================================================= */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      [data-motion="on"] .parallax-slow {
+        animation: parallax linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+      [data-motion="on"] .zoom-out {
+        animation: zoom-out linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 60%;
+      }
+    }
+  }
+  @keyframes parallax {
+    from { transform: translateY(var(--parallax, 3%)); }
+    to { transform: translateY(calc(var(--parallax, 3%) * -1)); }
+  }
+  @keyframes zoom-out {
+    from { transform: scale(1.08); }
+    to { transform: scale(1); }
+  }
+
   .fade-up {
-    animation: fade-up 460ms var(--ease-out) backwards;
+    animation: fade-up 480ms var(--ease-out) backwards;
     animation-delay: var(--delay, 0ms);
   }
-  @keyframes fade-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-
-  /* Ouverture d'une étude de cas : la carte se rapproche brièvement
-     avant que la page ne prenne le relais. */
-  [data-work-card] { transition: transform 220ms var(--ease-out), opacity 220ms var(--ease-out); }
-  [data-work-card][data-opening="true"] { transform: scale(1.012); opacity: 0.72; }
+  @keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
   .scrollbar-none { scrollbar-width: none; }
   .scrollbar-none::-webkit-scrollbar { display: none; }
 
-  /* Colonnes de repère, en fond de composition éditoriale */
-  .grid-rule {
-    background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
-    background-size: 25% 100%;
-  }
+  /* Ouverture d'une étude de cas : la carte se rapproche brièvement. */
+  [data-work-card] { transition: transform 240ms var(--ease-out), opacity 240ms var(--ease-out); }
+  [data-work-card][data-opening="true"] { transform: scale(1.012); opacity: 0.7; }
 }
 
-/* ==================================================================
-   Transitions de page natives (View Transitions API).
-   Amélioration progressive : sans support, la navigation reste
-   instantanée et le contenu complet.
-================================================================== */
-@view-transition { navigation: auto; }
-
-::view-transition-old(root) { animation: vt-out 200ms var(--ease-out) both; }
-::view-transition-new(root) { animation: vt-in 360ms var(--ease-out) both; }
-@keyframes vt-out { to { opacity: 0; } }
-@keyframes vt-in { from { opacity: 0; } }
-
-/* Le panneau choisi devient le cadre de la page suivante. */
-::view-transition-group(universe-panel) { animation-duration: 520ms; animation-timing-function: var(--ease-in-out); }
-::view-transition-group(work-shot) { animation-duration: 460ms; animation-timing-function: var(--ease-in-out); }
-::view-transition-old(work-shot),
-::view-transition-new(work-shot) { animation: none; mix-blend-mode: normal; height: 100%; }
-
 @media (prefers-reduced-motion: reduce) {
-  @view-transition { navigation: none; }
-
   .word-mask > span,
   .lift-in,
   .fade-up { animation: none; opacity: 1; transform: none; }
@@ -396,8 +396,7 @@
   .rule-in { transform: scaleX(1); transition: none; }
   .slide-in, .rise-in { opacity: 1; transform: none; transition: none; }
   .draw, [data-visible="true"] .draw { animation: none; stroke-dashoffset: 0; stroke-dasharray: none; }
-  .flow { animation: none; opacity: 0.55; stroke-dasharray: none; }
-  .depth-layer { transform: none !important; }
+  .flow { animation: none; opacity: 0.6; stroke-dasharray: none; }
   .press:active { transform: none; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }

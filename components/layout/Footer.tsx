@@ -2,41 +2,51 @@ import Link from "next/link";
 import { profile, company, contact } from "@/data/profile";
 import { Container } from "@/components/ui/Container";
 import { realValue } from "@/lib/utils";
+import { HarmonyMark } from "@/components/brand/HarmonyMark";
 
-/**
- * Pied de page commun. Le bloc « société » n'apparaît que côté création :
- * il n'a rien à faire dans un parcours de recrutement.
- */
-export function Footer({ universe }: { universe: "creation" | "systems" }) {
+const LINKS = [
+  { href: "/creation", label: "Réalisations" },
+  { href: "/systemes", label: "Parcours IT" },
+  { href: "/formation", label: "Projets de formation" },
+  { href: "/systemes#homelab", label: "Home lab" },
+];
+
+export function Footer() {
   const github = realValue(contact.github);
   const linkedin = realValue(contact.linkedin);
-  const other =
-    universe === "creation"
-      ? { href: "/systemes", label: "Systèmes & réseaux" }
-      : { href: "/creation", label: "Web & applications" };
+  const cv = realValue(contact.cv);
 
   return (
-    <footer className="border-t border-line bg-paper py-14">
+    <footer data-surface="dark" className="bg-paper py-16">
       <Container>
-        <div className="grid gap-10 md:grid-cols-12">
+        <div className="grid gap-x-12 gap-y-10 md:grid-cols-12">
           <div className="md:col-span-5">
-            <p className="text-h3 text-ink">{profile.name}</p>
-            <p className="mt-2 max-w-[34ch] text-body text-ink-2">
-              {universe === "creation"
-                ? "Conception de sites, d'applications et de produits numériques."
-                : "Administration systèmes, réseaux et support utilisateurs."}
+            <HarmonyMark decorative strokeWidth={22} className="h-10 w-auto text-accent" />
+            <p className="mt-6 text-h3 text-ink">{profile.name}</p>
+            <p className="mt-1.5 max-w-[34ch] text-body text-ink-2">
+              {profile.role} · {profile.secondRole}
             </p>
           </div>
 
-          <div className="md:col-span-3">
-            <p className="font-mono text-tech uppercase tracking-[0.18em] text-ink-3">Contact</p>
+          <nav aria-label="Pied de page" className="md:col-span-3">
+            <p className="font-mono text-tech uppercase text-ink-3">Explorer</p>
+            <ul className="mt-4 space-y-2">
+              {LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="link-underline text-body text-ink-2 hover:text-ink">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="md:col-span-4">
+            <p className="font-mono text-tech uppercase text-ink-3">Contact</p>
             <ul className="mt-4 space-y-2 text-body text-ink-2">
               <li>
-                <a
-                  className="link-underline hover:text-ink"
-                  href={`mailto:${universe === "creation" ? contact.projectEmail : contact.jobEmail}`}
-                >
-                  {universe === "creation" ? contact.projectEmail : contact.jobEmail}
+                <a className="link-underline hover:text-ink" href={`mailto:${contact.email}`}>
+                  {contact.email}
                 </a>
               </li>
               <li>
@@ -44,19 +54,15 @@ export function Footer({ universe }: { universe: "creation" | "systems" }) {
                   {contact.phoneDisplay}
                 </a>
               </li>
-            </ul>
-          </div>
-
-          <div className="md:col-span-2">
-            <p className="font-mono text-tech uppercase tracking-[0.18em] text-ink-3">Ailleurs</p>
-            <ul className="mt-4 space-y-2 text-body text-ink-2">
-              {github && (
+              {cv && (
                 <li>
-                  <a className="link-underline hover:text-ink" href={github} target="_blank" rel="noopener noreferrer">
-                    GitHub
+                  <a className="link-underline hover:text-ink" href={cv} target="_blank" rel="noopener noreferrer">
+                    Consulter mon CV
                   </a>
                 </li>
               )}
+            </ul>
+            <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-body text-ink-2">
               {linkedin && (
                 <li>
                   <a className="link-underline hover:text-ink" href={linkedin} target="_blank" rel="noopener noreferrer">
@@ -64,33 +70,22 @@ export function Footer({ universe }: { universe: "creation" | "systems" }) {
                   </a>
                 </li>
               )}
-            </ul>
-          </div>
-
-          <div className="md:col-span-2">
-            <p className="font-mono text-tech uppercase tracking-[0.18em] text-ink-3">L&apos;autre pratique</p>
-            <ul className="mt-4 space-y-2 text-body text-ink-2">
-              <li>
-                <Link className="link-underline hover:text-ink" href={other.href}>
-                  {other.label}
-                </Link>
-              </li>
-              <li>
-                <Link className="link-underline hover:text-ink" href="/">
-                  Entrée du site
-                </Link>
-              </li>
+              {github && (
+                <li>
+                  <a className="link-underline hover:text-ink" href={github} target="_blank" rel="noopener noreferrer">
+                    GitHub
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-line pt-6 font-mono text-tech text-ink-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-2 border-t border-line pt-6 font-mono text-tech uppercase text-ink-3 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} {profile.name}</p>
-          {universe === "creation" && (
-            <p>
-              {company.name} · SIREN {company.siren} · {company.address.postalCode} {company.address.city}
-            </p>
-          )}
+          <p>
+            {company.name} · SIREN {company.siren}
+          </p>
         </div>
       </Container>
     </footer>

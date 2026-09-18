@@ -278,8 +278,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             <p className="mt-3 max-w-[46ch] text-body text-ink-2">{next.lead}</p>
           </div>
           <div className="flex flex-wrap gap-3 md:col-span-5 md:justify-end">
-            <ButtonLink href={`mailto:${contact.projectEmail}?subject=Projet%20—%20prise%20de%20contact`} variant="accent">
-              Parlons de votre projet
+            <ButtonLink href={`mailto:${contact.email}`} variant="primary">
+              Me contacter
             </ButtonLink>
             <ButtonLink href="/creation#realisations">
               Toutes les réalisations

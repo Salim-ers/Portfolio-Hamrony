@@ -3,13 +3,13 @@ import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * Les boutons ne connaissent aucune couleur : ils lisent les jetons de
- * l'univers courant. Le même composant est donc juste sur ivoire comme
- * sur graphite, et les contrastes sont vérifiés dans les deux thèmes.
+ * Les boutons ne connaissent aucune couleur : ils lisent les jetons du
+ * thème courant. Le même composant est donc juste sur ivoire comme sur
+ * marine, et les contrastes sont vérifiés dans les deux.
  *
  *   primary   — encre pleine, action principale
- *   accent    — couleur d'accent, réservée à une seule action par page
- *   secondary — filet, actions de second rang
+ *   accent    — laiton, réservé à une seule action par page
+ *   secondary — filet
  *   quiet     — lien souligné à l'arrivée du curseur
  */
 type Variant = "primary" | "accent" | "secondary" | "quiet";

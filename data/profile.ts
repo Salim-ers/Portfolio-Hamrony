@@ -1,30 +1,46 @@
 /**
- * Identité et points de contact.
+ * Identité et contact.
  *
- * Le contact est distinct selon l'univers consulté :
- *  - création numérique → demande de projet, adresse Harmony Solutions
- *  - systèmes & réseaux → opportunité professionnelle, adresse personnelle
- * Les deux ne sont jamais mélangés dans un même texte.
+ * Ce site est le portfolio personnel de Salim El Rhalmani. Harmony
+ * Solutions y figure comme sa dimension entrepreneuriale, pas comme une
+ * agence : le discours commercial appartiendra au futur site Harmony.
  */
 export const profile = {
   name: "Salim El Rhalmani",
   firstName: "Salim",
-  country: "France",
+  lastName: "El Rhalmani",
+  role: "Administrateur systèmes & réseaux",
+  secondRole: "Créateur de produits numériques",
+  location: "France · Île-de-France",
 
-  /** Les deux pratiques, telles qu'annoncées à l'entrée du site. */
+  /** Phrase d'accroche du hero. Une seule, courte. */
+  lede:
+    "Je conçois et j'administre des infrastructures, j'expérimente dans mon laboratoire personnel, et je construis des produits numériques avec Harmony Solutions.",
+
+  /** Repères affichés sous le hero et dans « À propos ». */
+  facts: [
+    { label: "Poste visé", value: "Administrateur systèmes & réseaux" },
+    { label: "Diplôme", value: "Titre RNCP niveau 6" },
+    { label: "Formation", value: "OpenClassrooms, 2025 — 2026" },
+    { label: "Entreprise", value: "Harmony Solutions" },
+  ],
+
+  /** Les deux pratiques, présentées après la présentation personnelle. */
   universes: {
     creation: {
-      id: "creation",
       href: "/creation",
-      title: "Web & applications",
-      line: "Sites vitrines, logiciels et produits numériques.",
-      cta: "Explorer mes créations",
+      index: "01",
+      title: "Création numérique",
+      line: "Sites, applications et produits SaaS, conçus et mis en ligne.",
+      keywords: ["Sites web", "Applications", "SaaS", "Produits", "Harmony Solutions"],
+      cta: "Explorer mes réalisations",
     },
     systems: {
-      id: "systems",
       href: "/systemes",
+      index: "02",
       title: "Systèmes & réseaux",
-      line: "Infrastructure, sécurité et support utilisateurs.",
+      line: "Infrastructure, administration, support et laboratoire personnel.",
+      keywords: ["Infrastructure", "Administration", "Support", "Home lab", "Microsoft 365", "Réseaux"],
       cta: "Explorer mon parcours IT",
     },
   },
@@ -34,6 +50,10 @@ export const company = {
   name: "Harmony Solutions",
   activity: "Création de sites internet et solutions informatiques",
   siren: "985 222 603",
+  /** Ce que Harmony représente dans ce portfolio : l'atelier, pas la vitrine. */
+  line:
+    "J'ai créé Harmony Solutions pour transformer mes idées et mes compétences techniques en projets concrets : sites, applications et produits SaaS.",
+  fields: ["Sites web", "Applications", "SaaS", "Solutions numériques"],
   address: {
     street: "66 Avenue Jean Jaurès",
     postalCode: "60290",
@@ -43,14 +63,13 @@ export const company = {
 } as const;
 
 /**
- * Une valeur entre crochets est un emplacement vide : le lien correspondant
- * n'est alors pas affiché (voir `realValue` dans lib/utils).
+ * Une valeur entre crochets est un emplacement vide : le lien
+ * correspondant n'est alors pas affiché (`realValue` dans lib/utils).
  */
 export const contact = {
-  /** Demandes de projet, côté création */
-  projectEmail: "contact@harmony-solutions.fr",
-  /** Opportunités professionnelles, côté systèmes & réseaux */
-  jobEmail: "salim.elrs@gmail.com",
+  email: "salim.elrs@gmail.com",
+  /** Adresse liée à l'activité Harmony Solutions */
+  companyEmail: "contact@harmony-solutions.fr",
   phoneDisplay: "06 51 08 08 33",
   phoneHref: "tel:+33651080833",
   github: "https://github.com/Salim-ers",
@@ -59,19 +78,19 @@ export const contact = {
 } as const;
 
 export const seo = {
-  title: "Salim El Rhalmani — Création web & applications · Systèmes, réseaux et support IT",
+  title: "Salim El Rhalmani — Administrateur systèmes & réseaux, créateur de produits numériques",
   description:
-    "Deux pratiques, une même signature. D'un côté la conception de sites, d'applications et de produits SaaS. De l'autre l'administration systèmes, réseaux et le support utilisateurs.",
+    "Portfolio de Salim El Rhalmani : infrastructure, administration systèmes et réseaux, laboratoire personnel, et produits numériques construits avec Harmony Solutions.",
   keywords: [
     "Salim El Rhalmani",
-    "Création site internet",
-    "Développement application web",
-    "SaaS",
     "Administrateur systèmes et réseaux",
-    "Support informatique N1 N2",
-    "Active Directory",
     "Windows Server",
+    "Active Directory",
     "Home lab",
+    "Support informatique N1 N2",
+    "Microsoft 365",
     "Harmony Solutions",
+    "Développement web",
+    "SaaS",
   ],
 } as const;

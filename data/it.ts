@@ -432,3 +432,148 @@ export const career: CareerEntry[] = [
     points: [],
   },
 ];
+
+/* ------------------------------------------------------------------
+   TROIS PILIERS TECHNIQUES
+   Regroupement lisible des compétences du CV, pour la page d'accueil.
+   Le détail complet reste dans `skillGroups`, sur /systemes.
+------------------------------------------------------------------ */
+export type Pillar = { id: string; name: string; line: string; items: string[] };
+
+export const pillars: Pillar[] = [
+  {
+    id: "systemes",
+    name: "Systèmes",
+    line: "Serveurs, annuaire et postes de travail.",
+    items: ["Windows Server", "Linux", "Active Directory", "GPO", "DNS / DHCP"],
+  },
+  {
+    id: "reseaux",
+    name: "Réseaux",
+    line: "Commutation, routage et filtrage.",
+    items: ["Cisco", "Alcatel", "VLAN", "Routage", "VPN", "pfSense"],
+  },
+  {
+    id: "workplace",
+    name: "Modern Workplace",
+    line: "Identités, collaboration et postes gérés.",
+    items: ["Microsoft 365", "Entra ID", "Intune", "Exchange Online", "Teams", "SharePoint"],
+  },
+];
+
+/* ------------------------------------------------------------------
+   TROIS PROJETS DE FORMATION MIS EN AVANT
+   Regroupements des treize projets professionnalisants listés au CV.
+   Rien n'est ajouté : chaque point renvoie à un projet réel de la liste.
+------------------------------------------------------------------ */
+export type Flagship = {
+  id: string;
+  n: string;
+  title: string;
+  /** Projets de la liste des 13 que ce regroupement recouvre */
+  covers: string[];
+  objective: string;
+  work: string[];
+  tech: string[];
+  learned: string;
+};
+
+export const flagships: Flagship[] = [
+  {
+    id: "annuaire",
+    n: "01",
+    title: "Active Directory",
+    covers: ["02", "03", "04"],
+    objective: "Monter un domaine Windows complet et le rendre administrable au quotidien.",
+    work: [
+      "Installation et administration d'un domaine AD DS.",
+      "Unités d'organisation, comptes et groupes.",
+      "Stratégies de groupe appliquées aux postes et aux utilisateurs.",
+      "Services DNS et DHCP, et automatisation en PowerShell.",
+    ],
+    tech: ["Windows Server", "AD DS", "GPO", "DNS", "DHCP", "PowerShell"],
+    learned:
+      "La structure des unités d'organisation se décide avant d'écrire la première stratégie : une GPO mal placée produit un effet invisible jusqu'au jour où elle gêne.",
+  },
+  {
+    id: "reseau",
+    n: "02",
+    title: "Réseau, VLAN et routage",
+    covers: ["05", "06"],
+    objective: "Concevoir un réseau segmenté, l'adresser et le faire communiquer.",
+    work: [
+      "Conception de réseaux IPv4 et IPv6 sous Cisco Packet Tracer.",
+      "Découpage en VLAN et affectation des ports.",
+      "Routage inter-VLAN.",
+    ],
+    tech: ["Cisco", "IPv4 / IPv6", "VLAN", "Routage", "TCP/IP"],
+    learned:
+      "Segmenter oblige à énoncer qui doit parler à qui. C'est un exercice de conception avant d'être un exercice de configuration.",
+  },
+  {
+    id: "securite",
+    n: "03",
+    title: "Sécurisation et audit",
+    covers: ["08", "11", "12"],
+    objective: "Exposer des services sans les exposer, puis vérifier ce qui a été monté.",
+    work: [
+      "Sécurisation des services HTTPS et SFTP.",
+      "Mise en œuvre d'un VPN IPsec.",
+      "Audit d'un domaine Windows et Active Directory.",
+      "Identification des vulnérabilités et recommandations ANSSI.",
+    ],
+    tech: ["HTTPS", "SFTP", "VPN IPsec", "Audit AD", "ANSSI"],
+    learned:
+      "Auditer sa propre infrastructure est l'étape qui apprend le plus : elle révèle les écarts entre ce qu'on croit avoir configuré et ce qui tourne réellement.",
+  },
+];
+
+/* ------------------------------------------------------------------
+   ENVIRONNEMENT TECHNIQUE
+   Catégories parcourables, pour ne pas afficher soixante badges d'un coup.
+------------------------------------------------------------------ */
+export const stackCategories: { id: string; name: string; items: string[] }[] = [
+  { id: "systemes", name: "Systèmes", items: ["Windows Server", "Linux", "Debian", "Ubuntu", "Active Directory", "GPO"] },
+  { id: "reseaux", name: "Réseaux", items: ["Cisco", "Alcatel", "VLAN", "Routage", "DNS", "DHCP", "VPN", "TCP/IP"] },
+  { id: "microsoft", name: "Microsoft", items: ["Microsoft 365", "Entra ID", "Intune", "Exchange Online", "Teams", "SharePoint Online", "OneDrive"] },
+  { id: "securite", name: "Sécurité", items: ["pfSense", "Microsoft Defender", "Fail2ban", "ACL", "VPN IPsec"] },
+  { id: "cloud", name: "Cloud & virtualisation", items: ["AWS", "Proxmox", "VMware", "VirtualBox", "Docker"] },
+  { id: "supervision", name: "Supervision", items: ["Zabbix", "Grafana", "Nagios", "Syslog", "Rsyslog"] },
+  { id: "dev", name: "Développement", items: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Supabase", "PostgreSQL", "MySQL"] },
+  { id: "outils", name: "Outils & méthodes", items: ["PowerShell", "Bash", "Python", "Ansible", "GLPI", "ServiceNow", "Zendesk", "Git", "ITIL"] },
+];
+
+/* ------------------------------------------------------------------
+   PARCOURS EN TROIS TEMPS
+   Version courte, pour la page d'accueil. Le détail complet, daté, reste
+   dans `career` ci-dessus, sur /systemes.
+------------------------------------------------------------------ */
+export const journey = [
+  {
+    id: "robotique",
+    n: "01",
+    period: "Jusqu'en 2020",
+    title: "Robotique",
+    org: "UFR Sciences, Amiens · PSA Stellantis",
+    line: "Licence Génie robotique et vision industrielle, puis intégration de robots collaboratifs en environnement industriel.",
+    tags: ["Automatisation", "Documentation technique", "Analyse de risques"],
+  },
+  {
+    id: "operations",
+    n: "02",
+    period: "2020 — 2025",
+    title: "Opérations",
+    org: "Federal Express, aéroport Paris-CDG",
+    line: "Coordination des opérations au sol, encadrement d'équipe et gestion d'incidents sous contrainte de temps.",
+    tags: ["Gestion d'incident", "Procédures", "Coordination"],
+  },
+  {
+    id: "reconversion",
+    n: "03",
+    period: "2025 — 2026",
+    title: "Reconversion IT",
+    org: "OpenClassrooms · Titre RNCP niveau 6",
+    line: "Administrateur systèmes, réseaux et sécurité. Treize projets professionnalisants, du support utilisateurs à la migration cloud.",
+    tags: ["Windows Server", "Réseaux", "Sécurité", "Cloud"],
+  },
+] as const;

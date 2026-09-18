@@ -1,18 +1,20 @@
 # Portfolio — Salim El Rhalmani
 
-Deux pratiques, une même signature.
-Un portfolio à deux univers autonomes, reliés par une identité typographique commune.
+Portfolio personnel. Il présente d'abord **Salim** : son parcours, sa
+reconversion vers l'IT, son laboratoire, et les produits qu'il construit.
+Harmony Solutions y figure comme sa dimension entrepreneuriale — le discours
+commercial appartiendra à un futur site Harmony séparé.
 
-| Univers | URL | Ambiance | Public visé |
-| --- | --- | --- | --- |
-| Porte d'entrée | `/` | Ivoire, deux panneaux | Tout le monde |
-| Web & applications | `/creation` | Ivoire, encre, accent vermillon | Clients, prospects |
-| Étude de cas | `/creation/<slug>` | idem | Clients, prospects |
-| Systèmes & réseaux | `/systemes` | Graphite, accent bleu électrique | Recruteurs |
+| Page | URL | Rôle |
+| --- | --- | --- |
+| Accueil | `/` | La narration complète, en dix sections |
+| Réalisations | `/creation` | Galerie des projets, sans discours commercial |
+| Étude de cas | `/creation/<slug>` | Contexte, rôle, choix de conception, écrans |
+| Parcours IT | `/systemes` | Compétences, projets phares, laboratoires, parcours |
+| Formation | `/formation` | Les treize projets professionnalisants |
 
-La porte d'entrée n'est jamais imposée : les deux univers ont une URL directe,
-la navigation persistante permet de basculer à tout moment, et le bouton retour
-du navigateur fonctionne normalement.
+La page d'accueil est une synthèse : un titre, deux ou trois phrases et un
+visuel par section. Le détail vit dans les pages internes.
 
 ## Stack
 
@@ -119,30 +121,26 @@ redirections des anciennes URLs, focus clavier visible, rendu avec
 appels à l'action de la porte d'entrée tiennent dans le premier écran. Les
 captures de contrôle vont dans `./.verify`.
 
-## Porte d'entrée
+## Identité graphique
 
-Sur ordinateur, la page fait exactement `100dvh` et ne défile pas. Le texte de
-chaque panneau est placé **en haut**, les images occupent la hauteur restante et
-se coupent en bas : quelle que soit la hauteur de la fenêtre, les deux titres et
-les deux appels à l'action restent visibles. Sur mobile, les panneaux s'empilent
-dans le flux et les images s'affichent en entier, sans recadrage.
+Toute la palette est échantillonnée sur le logo Harmony Solutions réel
+(`public/brand/harmony-logo-source.png`) :
 
-Le schéma du laboratoire existe en deux orientations — horizontale sur grand
-écran, verticale sur mobile — parce qu'un SVG conserve son rapport de forme : la
-seule version verticale se réduirait à un timbre-poste dans un panneau large et
-peu haut.
+| | |
+| --- | --- |
+| Marine | `#172a4a` — fond du logo, sections techniques |
+| Laiton | `#c6a570` — monogramme, filets, accents |
+| Ivoire | `#f7f4ed` — surfaces claires |
 
-## Mouvement
+Le monogramme est construit en **traits parallèles**. Cette construction
+devient la grammaire du site : filets doubles (`.rule-double`), équerres en
+puce (`.bracket`), colonnes appariées en fond (`.ruled-bg`), et le monogramme
+lui-même en filigrane dans le hero et le contact. Au premier chargement de la
+session, ses traits se dessinent brièvement (`components/brand/Intro.tsx`) —
+jamais un écran de chargement : la page est déjà rendue dessous.
 
-Les états « masqués » des animations sont portés par `[data-motion="on"]`,
-attribut posé sur `<html>` par un script inline **uniquement** si le JavaScript
-s'exécute et que `prefers-reduced-motion` n'est pas activé. Conséquence : sans
-JavaScript, ou avec les animations réduites, rien n'est masqué — tout le contenu
-s'affiche directement dans son état final.
-
-Quatre familles de révélation se relaient pour ne jamais rejouer le même effet
-deux sections de suite : `mask` (captures), `rule` (filets), `slide` (colonnes
-éditoriales), `rise` (listes et détails techniques).
+Rythme : environ 70 % de surfaces claires, 30 % de marine. Les sections marine
+marquent les moments techniques — ingénierie IT et laboratoire.
 
 ## Thème
 

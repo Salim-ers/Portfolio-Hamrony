@@ -2,9 +2,15 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { profile, company, contact, seo } from "@/data/profile";
-import { UniverseNav } from "@/components/layout/UniverseNav";
+import { SiteNav } from "@/components/layout/SiteNav";
+import { Footer } from "@/components/layout/Footer";
+import { Intro } from "@/components/brand/Intro";
 import { realValue, siteUrl } from "@/lib/utils";
 
+/**
+ * Deux familles seulement : une sans-serif de titrage et une monospace
+ * technique. C'est la règle typographique du site.
+ */
 const grotesk = localFont({
   src: "./fonts/schibsted-grotesk.woff2",
   variable: "--font-grotesk",
@@ -18,13 +24,6 @@ const plexMono = localFont({
   ],
   variable: "--font-plex-mono",
   display: "swap",
-});
-const cormorant = localFont({
-  src: "./fonts/cormorant-600.woff2",
-  variable: "--font-cormorant",
-  weight: "600",
-  display: "swap",
-  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -49,8 +48,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f2ea" },
-    { media: "(prefers-color-scheme: dark)", color: "#121419" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f4ed" },
+    { media: "(prefers-color-scheme: dark)", color: "#172a4a" },
   ],
 };
 
@@ -65,13 +64,14 @@ function StructuredData() {
         "@id": `${url}/#person`,
         name: profile.name,
         url,
-        jobTitle: "Administrateur systèmes, réseaux et sécurité",
-        email: `mailto:${contact.jobEmail}`,
+        jobTitle: profile.role,
+        email: `mailto:${contact.email}`,
         knowsAbout: [
           "Administration systèmes",
           "Administration réseaux",
           "Active Directory",
           "Windows Server",
+          "Microsoft 365",
           "Support informatique N1 N2",
           "Développement web",
           "SaaS",
@@ -84,8 +84,7 @@ function StructuredData() {
         "@id": `${url}/#organization`,
         name: company.name,
         description: company.activity,
-        email: contact.projectEmail,
-        telephone: "+33651080833",
+        email: contact.companyEmail,
         founder: { "@id": `${url}/#person` },
         identifier: { "@type": "PropertyValue", propertyID: "SIREN", value: company.siren.replace(/\s/g, "") },
         address: {
@@ -103,14 +102,13 @@ function StructuredData() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${grotesk.variable} ${plexMono.variable} ${cormorant.variable}`}>
+    <html lang="fr" className={`${grotesk.variable} ${plexMono.variable}`}>
       <head>
         {/*
           Active les états d'animation avant le premier rendu, et seulement
           si le JavaScript s'exécute et que l'utilisateur n'a pas demandé
           moins d'animations. Sans cet attribut, aucun contenu n'est masqué :
           une erreur de script ne peut donc pas rendre une section invisible.
-          Inline et synchrone : pas de clignotement au chargement.
         */}
         <script
           dangerouslySetInnerHTML={{
@@ -120,8 +118,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <StructuredData />
-        <UniverseNav />
+        <Intro />
+        <SiteNav />
         <main id="main">{children}</main>
+        <Footer />
       </body>
     </html>
   );

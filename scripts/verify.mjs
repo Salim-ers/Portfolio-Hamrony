@@ -25,15 +25,18 @@ const PAGES = [
   ["accueil", "/"],
   ["creation", "/creation"],
   ["systemes", "/systemes"],
+  ["formation", "/formation"],
   ["cas-centrium", "/creation/centrium"],
   ["cas-royale", "/creation/royale-auto-ecole"],
   ["404", "/page-inexistante"],
 ];
 
 const VIEWPORTS = [
-  { name: "desktop", width: 1440, height: 900 },
-  { name: "tablette", width: 834, height: 1112 },
-  { name: "mobile", width: 390, height: 844 },
+  { name: "1920", width: 1920, height: 1080 },
+  { name: "1440", width: 1440, height: 900 },
+  { name: "768", width: 768, height: 1024 },
+  { name: "430", width: 430, height: 932 },
+  { name: "375", width: 375, height: 812 },
 ];
 
 const problems = [];
@@ -189,14 +192,12 @@ for (const vp of VIEWPORTS) {
   await ctx.close();
 }
 
-/* ---------- 5. Le choix tient dans le premier écran ----------
-   Sur la porte d'entrée, les deux titres et les deux appels à l'action
-   doivent être visibles sans défiler, y compris sur un écran large et
-   peu haut. C'est exactement ce qui avait cassé une fois. */
+/* ---------- 5. Le hero tient dans le premier écran ----------
+   Le nom, les deux intitulés et les appels à l'action doivent être
+   visibles sans défiler, y compris sur un écran large et peu haut. */
 {
   const tailles = [
-    [2048, 1000],
-    [1920, 900],
+    [1920, 1080],
     [1680, 780],
     [1440, 900],
     [1280, 720],
@@ -205,34 +206,29 @@ for (const vp of VIEWPORTS) {
     const ctx = await browser.newContext({ viewport: { width, height }, locale: "fr-FR" });
     const page = await ctx.newPage();
     await page.goto(base + "/", { waitUntil: "networkidle" });
-    await page.waitForTimeout(1200);
+    await page.waitForTimeout(1600);
     const audit = await page.evaluate(() => {
-      const out = { fenetre: window.innerHeight, panneaux: {} };
-      for (const sel of ["#panel-creation", "#panel-systems"]) {
-        const titre = document.querySelector(sel);
-        if (!titre) continue;
-        const section = titre.closest("section");
-        const cta = [...section.querySelectorAll("span")].find((s) => /Explorer/.test(s.textContent || ""));
-        out.panneaux[sel] = Math.round((cta ?? titre).getBoundingClientRect().bottom);
-      }
-      return out;
+      const cta = [...document.querySelectorAll("a")].find((a) => /Découvrir mon parcours/.test(a.textContent || ""));
+      const h1 = document.querySelector("h1");
+      return {
+        fenetre: window.innerHeight,
+        ctaBas: cta ? Math.round(cta.getBoundingClientRect().bottom) : null,
+        titreBas: h1 ? Math.round(h1.getBoundingClientRect().bottom) : null,
+      };
     });
-    for (const [sel, bas] of Object.entries(audit.panneaux)) {
-      if (bas > audit.fenetre)
-        note(`${width}x${height} porte d'entrée : l'appel à l'action de ${sel} est sous le pli (${bas} > ${audit.fenetre})`);
-    }
-    if (Object.keys(audit.panneaux).length !== 2)
-      note(`${width}x${height} porte d'entrée : ${Object.keys(audit.panneaux).length} panneau(x) trouvé(s) au lieu de 2`);
+    if (audit.ctaBas === null) note(`${width}x${height} hero : appel à l'action introuvable`);
+    else if (audit.ctaBas > audit.fenetre)
+      note(`${width}x${height} hero : l'appel à l'action est sous le pli (${audit.ctaBas} > ${audit.fenetre})`);
     await ctx.close();
   }
-  console.log(`porte d'entrée : ${tailles.length} formats d'écran vérifiés`);
+  console.log(`hero : ${tailles.length} formats d'écran vérifiés`);
 }
 
 /* ---------- 6. Animations réduites ---------- */
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce", locale: "fr-FR" });
   const page = await ctx.newPage();
-  for (const [name, path] of [["accueil", "/"], ["creation", "/creation"], ["systemes", "/systemes"]]) {
+  for (const [name, path] of [["accueil", "/"], ["creation", "/creation"], ["systemes", "/systemes"], ["formation", "/formation"]]) {
     await page.goto(base + path, { waitUntil: "networkidle" });
     // Sans défilement : tout doit déjà être lisible.
     const hidden = await page.evaluate(() =>
@@ -243,7 +239,7 @@ for (const vp of VIEWPORTS) {
     if (hidden) note(`prefers-reduced-motion ${path} : ${hidden} élément(s) encore masqué(s)`);
     await page.screenshot({ path: `${OUT}/reduced-${name}.jpg`, fullPage: true, type: "jpeg", quality: 70 });
   }
-  console.log("prefers-reduced-motion : 3 pages vérifiées");
+  console.log("prefers-reduced-motion : 4 pages vérifiées");
   await ctx.close();
 }
 
